@@ -1,0 +1,25 @@
+# 컴파일된 클래스 파일
+*.class
+
+# 로그 파일
+*.log
+
+# 패키지 아카이브 파일
+*.jar
+*.war
+*.ear
+
+# 빌드 결과물 (javac)
+build/
+bin/
+out/
+
+# IDE 관련 파일 및 폴더
+.idea/
+*.iml
+*.ipr
+.vscode/
+
+# OS에서 생성하는 파일들
+.DS_Store
+Thumbs.db
