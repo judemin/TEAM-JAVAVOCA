@@ -1,10 +1,12 @@
 package ui;
 
+import enums.FilePath;
 import manager.FileManager;
 import manager.QuizManager;
 import manager.SearchManager;
 import manager.WordManager;
 
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -35,7 +37,9 @@ public class App {
     public void run() {
 
         // 홈경로, 파일 존재, 입출력 권한 확인
-        FileManager.checkFilesExistance();
+        File wordFile = FileManager.getFile(FilePath.WORDS);
+        File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
+
         FileManager.checkFilesAuthority();
 
         // 파일 무결성 확인, 파일 데이터 가져오기
