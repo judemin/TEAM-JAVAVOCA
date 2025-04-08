@@ -13,7 +13,7 @@ public class FileManager {
     /**
      * 주어진 두 파일 경로에 해당하는 파일들의 존재여부와 권한을 검사합니다.
      */
-
+    static String homePath;
     static File wordFile;
     static File wrongFile;
 
@@ -22,6 +22,17 @@ public class FileManager {
         // TODO: 5.4 무결성 확인 및 처리 - 1. 항목이 이상하게 들여쓰기 되어있음
 
         // 1. 사용자 홈 경로 파악
+        homePath = getHomePath();
+
+        // 2. 홈 경로에서 단어 데이터 파일(words.txt, wrong_answers.txt) 존재 여부 확인
+        wordFile = new File(homePath, "words.txt");
+        wrongFile = new File(homePath, "wrong_answers.txt");
+
+        exitIfNotExist(wordFile);
+        exitIfNotExist(wrongFile);
+    }
+
+    public static String getHomePath(){
         String homePath = System.getProperty("user.home");
         // 테스트 전에 한번씩 찍어보세요
         // System.out.println(homePath);
@@ -31,21 +42,15 @@ public class FileManager {
             System.exit(1);
         }
 
-        // 2. 홈 경로에서 단어 데이터 파일(words.txt, wrong_answers.txt) 존재 여부 확인
-        wordFile = new File(homePath, "words.txt");
-        wrongFile = new File(homePath, "wrong_answers.txt");
+        return homePath;
+    }
 
-        if (!wordFile.exists()) {
-            System.out.print("!!! 오류: 홈 경로에 words.txt 데이터 파일이 없습니다! ");
+    private static void exitIfNotExist(File file) {
+        if (!file.exists()) {
+            System.out.print("!!! 오류: 홈 경로에 "+file.getName()+" 데이터 파일이 없습니다! ");
             exitProgram();
             System.exit(1);
         }
-        if (!wrongFile.exists()) {
-            System.out.print("!!! 오류: 홈 경로에 wrong_answers.txt 데이터 파일이 없습니다! ");
-            exitProgram();
-            System.exit(1);
-        }
-
     }
 
 
@@ -82,6 +87,7 @@ public class FileManager {
     TODO: checkFileIntegrity에서 분리
      */
     public static void loadFiles() {
+
     }
 
     private static void exitProgram() {
