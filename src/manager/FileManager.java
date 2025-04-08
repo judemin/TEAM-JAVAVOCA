@@ -74,30 +74,34 @@ public class FileManager {
 
     public static void checkFileIntegrity(File file) {
         // 파일 무결성 확인
-//        try {
-//            fileToIO.get(file.getName()).getMethod("loadWords").invoke(file.getName());
-//        } catch (IOException e) {
-//            exitProgram();
-//            // 원래 app.run() 에서 return 이었음!
-//            System.exit(1);
-//        } catch (NoSuchMethodException e) {
-//            throw new RuntimeException(e);
-//        } catch (InvocationTargetException e) {
-//            throw new RuntimeException(e);
-//        } catch (IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            fileToIO.get(file.getName()).getMethod("loadWords").invoke(file.getName());
+        } catch (Exception e) {
+            exitProgram();
+            // 원래 app.run() 에서 return 이었음!
+            System.exit(1);
+        }
     }
 
     /*
     TODO: checkFileIntegrity에서 분리
      */
     public static void loadFiles(File file) {
-
+        // 파일 데이터를 WordFileIO, WrongFileIO 객체에 넣기
+        try {
+            fileToIO.get(file.getName()).getMethod("loadWords").invoke(file.getName());
+        } catch (Exception e) {
+            exitProgram();
+            // 원래 app.run() 에서 return 이었음!
+            System.exit(1);
+        }
     }
 
     private static void exitProgram() {
         System.out.println("프로그램을 종료합니다.");
     }
 
+    public static void removeDuplicates(File wordFile) {
+
+    }
 }

@@ -37,6 +37,7 @@ public class App {
     public void run() {
 
         // 홈경로, 파일 존재, 입출력 권한 확인
+        // 분리
         File wordFile = FileManager.getFile(FilePath.WORDS);
         File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
 
@@ -46,6 +47,9 @@ public class App {
         // 파일 무결성 확인, 파일 데이터 가져오기
         FileManager.checkFileIntegrity(wordFile);
         FileManager.checkFileIntegrity(wrongFile);
+
+        FileManager.removeDuplicates(wordFile);
+        FileManager.removeDuplicates(wordFile);
 
         FileManager.loadFiles(wordFile);
         FileManager.loadFiles(wrongFile);
