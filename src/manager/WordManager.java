@@ -36,6 +36,7 @@ public class WordManager {
      * 단어 추가, 수정, 삭제 중 하나를 선택하고 해당 기능을 실행합니다.
      */
     public void handleWordManagementMenu() {
+        System.out.println("[handleWordManagementMenu]");
     }
 
     /**

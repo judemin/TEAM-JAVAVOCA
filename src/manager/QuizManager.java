@@ -26,6 +26,7 @@ public class QuizManager {
      * 일반 퀴즈와 오답 퀴즈 모드 중 선택하여 퀴즈를 시작합니다.
      */
     public void handleQuizMenu() {
+        System.out.println("[handleQuizMenu]");
     }
 
     /**

@@ -11,7 +11,7 @@ import java.util.List;
 public class WrongFileIO {
 
     // 메모리 상의 단어 목록
-    private List<Word> wrongWords = new ArrayList<Word>();
+    private static List<Word> wrongWords = new ArrayList<Word>();
 
     /**
      * 오답 데이터 파일(wrong_answers.txt)을 읽어서 오답 단어 목록을 초기화합니다.
@@ -20,8 +20,9 @@ public class WrongFileIO {
      * @return 오답 단어 목록
      * @throws IOException 파일을 읽는 중 오류가 발생한 경우
      */
-    public static List<Word> loadWrongWords(String filePath) throws IOException {
-        return null;
+    public static void loadWrongWords(String filePath) throws IOException {
+        // IOException 발생시키면 파일 무결성에 문제가 있다는 뜻
+        // new IOException
     }
 
     /**

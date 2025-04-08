@@ -21,6 +21,7 @@ public class SearchManager {
      * 단어 검색 기능을 처리합니다. 검색 기준(단어 또는 뜻풀이)을 선택하고 검색을 수행합니다.
      */
     public void handleSearchMenu() {
+        System.out.println("[handleSearchMenu]");
     }
 
     /**
