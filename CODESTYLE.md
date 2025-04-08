@@ -1,4 +1,4 @@
-# Code Style Guid
+# Code Style Guide
 
 ## 목차
 
