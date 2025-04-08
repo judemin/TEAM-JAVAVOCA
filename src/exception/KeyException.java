@@ -56,8 +56,9 @@ public class KeyException extends Exception {
      * @param word 사용자로부터 입력된 단어 문자열
      * @throws KeyException 단어가 규칙에 어긋난 경우
      */
-    public static void validateWord(String word) throws KeyException {
+    public static boolean validateWord(String word) throws KeyException {
         // 스켈레톤 코드: 실제 검증 로직은 구현 시 채워넣으세요.
+        return true;
     }
 
     /**

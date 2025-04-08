@@ -1,5 +1,7 @@
 package ui;
 
+import exception.KeyException;
+import io.WordFileIO;
 import io.WrongFileIO;
 import manager.QuizManager;
 import manager.SearchManager;
@@ -12,9 +14,14 @@ import java.util.Scanner;
  */
 public class App {
 
+    private String wordFilePath;
+    private String wrongFilePath;
+
+    private KeyException keyException;
     private WordManager wordManager;
     private QuizManager quizManager;
     private SearchManager searchManager;
+    private WordFileIO fileIO;
     private WrongFileIO wrongFileIO;
     private Scanner scanner;
 
@@ -23,9 +30,18 @@ public class App {
      *
      * @param wordFilePath  단어 데이터 파일 경로
      * @param wrongFilePath 오답 데이터 파일 경로
-     * @throws IOException 데이터 파일 로드 중 오류가 발생한 경우
      */
-    public App(String wordFilePath, String wrongFilePath) throws IOException {
+    public App(String wordFilePath, String wrongFilePath) {
+        this.wordFilePath = wordFilePath;
+        this.wrongFilePath = wrongFilePath;
+
+        this.keyException = new KeyException();
+        this.wordManager = new WordManager();
+        this.quizManager = new QuizManager();
+        this.searchManager = new SearchManager();
+        this.fileIO = new WordFileIO();
+        this.wrongFileIO = new WrongFileIO();
+        this.scanner = new Scanner(System.in);
     }
 
     /**
@@ -38,26 +54,6 @@ public class App {
      * 메인 메뉴를 출력합니다.
      */
     private void displayMainMenu() {
-    }
-
-    /**
-     * 단어 퀴즈 모드 선택 및 진행을 처리합니다.
-     * 일반 퀴즈와 오답 퀴즈 모드 중 선택하여 퀴즈를 시작합니다.
-     */
-    private void handleQuizMenu() {
-    }
-
-    /**
-     * 단어 검색 기능을 처리합니다. 검색 기준(단어 또는 뜻풀이)을 선택하고 검색을 수행합니다.
-     */
-    private void handleSearchMenu() {
-    }
-
-    /**
-     * 단어 레코드 관리 기능을 처리합니다.
-     * 단어 추가, 수정, 삭제 중 하나를 선택하고 해당 기능을 실행합니다.
-     */
-    private void handleWordManagementMenu() {
     }
 
     /**

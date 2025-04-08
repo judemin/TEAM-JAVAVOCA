@@ -18,11 +18,8 @@ public class WordManager {
 
     /**
      * WordManager를 초기화합니다.
-     *
-     * @param wordFilePath 단어 데이터 파일 경로
-     * @throws IOException 단어 데이터를 불러오는 중 오류가 발생한 경우
      */
-    public WordManager(String wordFilePath) throws IOException {
+    public WordManager(){
     }
 
     /**
@@ -32,6 +29,13 @@ public class WordManager {
      */
     public List<Word> getAllWords() {
         return null;
+    }
+
+    /**
+     * 단어 레코드 관리 기능을 처리합니다.
+     * 단어 추가, 수정, 삭제 중 하나를 선택하고 해당 기능을 실행합니다.
+     */
+    public void handleWordManagementMenu() {
     }
 
     /**

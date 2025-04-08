@@ -2,6 +2,7 @@ package io;
 
 import data.Word;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +10,8 @@ import java.util.List;
  */
 public class WrongFileIO {
 
-    private List<Word> wrongAnswers;
+    // 메모리 상의 단어 목록
+    private List<Word> wrongWords = new ArrayList<Word>();
 
     /**
      * 오답 데이터 파일(wrong_answers.txt)을 읽어서 오답 단어 목록을 초기화합니다.
@@ -18,7 +20,7 @@ public class WrongFileIO {
      * @return 오답 단어 목록
      * @throws IOException 파일을 읽는 중 오류가 발생한 경우
      */
-    public List<Word> loadWrongAnswers(String filePath) throws IOException {
+    public static List<Word> loadWrongWords(String filePath) throws IOException {
         return null;
     }
 
@@ -28,7 +30,7 @@ public class WrongFileIO {
      * @param filePath 오답 데이터 파일 경로
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      */
-    public void saveWrongAnswers(String filePath) throws IOException {
+    public static void saveWrongWords(String filePath) throws IOException {
     }
 
     /**
@@ -37,7 +39,7 @@ public class WrongFileIO {
      * @param word 추가할 오답 Word 객체
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      */
-    public void addWrongAnswer(Word word) throws IOException {
+    public static void addWrongWord(Word word) throws IOException {
     }
 
     /**
@@ -46,7 +48,7 @@ public class WrongFileIO {
      * @param word 제거할 Word 객체
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      */
-    public void removeWrongAnswer(Word word) throws IOException {
+    public void removeWrongWord(Word word) throws IOException {
     }
 
     /**
@@ -54,7 +56,7 @@ public class WrongFileIO {
      *
      * @return 오답 Word 객체 목록
      */
-    public List<Word> getWrongAnswers() {
-        return null;
+    public List<Word> getWrongWord() {
+        return wrongWords;
     }
 }

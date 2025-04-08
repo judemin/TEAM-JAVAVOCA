@@ -127,6 +127,7 @@ checkUserAuthentication();
 ## 예외 처리
 
 - 예외는 명확한 메시지와 함께 처리합니다.
+- 일부 FileIO와 관련된 메소드를 제외하고는 전부 throw하지 않고 각 클래스 내에서 자체적으로 처리합니다.
 
 ```java
 // Good

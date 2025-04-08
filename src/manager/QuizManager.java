@@ -10,16 +10,22 @@ import java.util.List;
  */
 public class QuizManager {
 
+    // words 전체 단어 목록
+    // wrongFileIO 오답 단어 FileIO 객체
     private List<Word> words;
     private WrongFileIO wrongFileIO;
 
     /**
      * QuizManager를 초기화합니다.
-     *
-     * @param words        전체 단어 목록
-     * @param wrongFileIO 오답 단어 FileIO 객체
      */
-    public QuizManager(List<Word> words, WrongFileIO wrongFileIO) {
+    public QuizManager() {
+    }
+
+    /**
+     * 단어 퀴즈 모드 선택 및 진행을 처리합니다.
+     * 일반 퀴즈와 오답 퀴즈 모드 중 선택하여 퀴즈를 시작합니다.
+     */
+    public void handleQuizMenu() {
     }
 
     /**
