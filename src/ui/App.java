@@ -40,11 +40,15 @@ public class App {
         File wordFile = FileManager.getFile(FilePath.WORDS);
         File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
 
-        FileManager.checkFilesAuthority();
+        FileManager.checkFileAuthority(wordFile);
+        FileManager.checkFileAuthority(wrongFile);
 
         // 파일 무결성 확인, 파일 데이터 가져오기
-        FileManager.checkFileIntegrity();
-        FileManager.loadFiles();
+        FileManager.checkFileIntegrity(wordFile);
+        FileManager.checkFileIntegrity(wrongFile);
+
+        FileManager.loadFiles(wordFile);
+        FileManager.loadFiles(wrongFile);
 
         while(true){
             // TODO: 에러 메세지 출력을 할지 말지 (수정사항)

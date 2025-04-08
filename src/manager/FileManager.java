@@ -1,19 +1,27 @@
 package manager;
 
 import enums.FilePath;
+import io.BaseIO;
 import io.WordFileIO;
 import io.WrongFileIO;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileManager {
 
     /**
      * 주어진 두 파일 경로에 해당하는 파일들의 존재여부와 권한을 검사합니다.
      */
-    static File wordFile;
-    static File wrongFile;
+
+    // TODO: wordfileIO와 wrongfileIO는 싱글톤으로
+    static final HashMap<String, Class<? extends BaseIO>> fileToIO = (HashMap<String, Class<? extends BaseIO>>) Map.of(
+            FilePath.WORDS.getPath(), WordFileIO.class,
+            FilePath.WRONG_ANSWERS.getPath(), WrongFileIO.class
+    );
 
 
     public static File getFile(FilePath fp) {
@@ -51,7 +59,7 @@ public class FileManager {
     }
 
 
-    public static void checkFilesAuthority(File file){
+    public static void checkFileAuthority(File file){
         // 3. 두 파일에 대한 입출력(R/W) 권한 검사
         if (!file.canRead() || !file.canWrite()) {
             String errorMessage = "!!! 오류: 데이터 파일\n"
@@ -64,22 +72,27 @@ public class FileManager {
 
     }
 
-    public static void checkFileIntegrity() {
+    public static void checkFileIntegrity(File file) {
         // 파일 무결성 확인
-        try {
-            WordFileIO.loadWords(FilePath.WORDS.getPath());
-            WrongFileIO.loadWrongWords(FilePath.WRONG_ANSWERS.getPath());
-        } catch (IOException e) {
-            exitProgram();
-            // 원래 app.run() 에서 return 이었음!
-            System.exit(1);
-        }
+//        try {
+//            fileToIO.get(file.getName()).getMethod("loadWords").invoke(file.getName());
+//        } catch (IOException e) {
+//            exitProgram();
+//            // 원래 app.run() 에서 return 이었음!
+//            System.exit(1);
+//        } catch (NoSuchMethodException e) {
+//            throw new RuntimeException(e);
+//        } catch (InvocationTargetException e) {
+//            throw new RuntimeException(e);
+//        } catch (IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     /*
     TODO: checkFileIntegrity에서 분리
      */
-    public static void loadFiles() {
+    public static void loadFiles(File file) {
 
     }
 
