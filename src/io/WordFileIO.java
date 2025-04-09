@@ -1,9 +1,5 @@
 package io;
 
-import data.Word;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 /**
  * 단어 및 오답 데이터 파일(words.txt, wrong_answers.txt)의 입출력을 관리하는 클래스입니다.
  */

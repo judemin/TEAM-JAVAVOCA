@@ -1,14 +1,17 @@
 package manager;
 
+import data.Word;
 import enums.FilePath;
 import io.BaseIO;
 import io.WordFileIO;
 import io.WrongFileIO;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class FileManager {
@@ -83,6 +86,60 @@ public class FileManager {
         }
     }
 
+    public static void removeDuplicates(File file) {
+        HashMap<String, String> recordMap = new HashMap<>();
+        ArrayList<String> duplicatedWordList = new ArrayList<>();
+        ArrayList<String> duplicatedExplanationList = new ArrayList<>();
+        ArrayList<String> filteredLines = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                String[] parts = line.split(":", 2);
+                String word = parts[0].trim();
+                String explanation = parts[1].trim();
+
+                if (recordMap.containsKey(word)) {
+                    // 단어가 이미 존재하면 현재 라인을 제거(추가하지 않음)
+                    // 중복 단어 리스트에 단어 추가
+                    duplicatedWordList.add(word);
+                    continue;
+                } else if (recordMap.containsValue(explanation)) {
+                    // 뜻풀이가 이미 존재하면 현재 라인을 제거(추가하지 않음)
+                    // 중복 뜻풀이 리스트에 뜻풀이 추가
+                    duplicatedExplanationList.add(explanation);
+                    continue;
+                } else {
+                    // 중복이 없으면 기록하고, 유효한 라인 목록에 추가
+                    recordMap.put(word, explanation);
+                    filteredLines.add(line);
+                }
+
+            }
+
+        } catch (Exception e) {
+            exitProgram();
+            // 원래 app.run() 에서 return 이었음!
+            System.exit(1);
+        }
+
+        try {
+            Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            exitProgram();
+            System.exit(1);
+        }
+
+        // 중복 제거 결과 출력
+        duplicatedWordList.forEach(w ->
+                System.out.println("성공적으로 중복 데이터 레코드를 제거했습니다. 사유: 중복인 단어 " + w)
+        );
+        duplicatedExplanationList.forEach(e ->
+                System.out.println("성공적으로 중복 데이터 레코드를 제거했습니다. 사유: 중복인 뜻풀이 " + e)
+        );
+    }
+
     /*
     TODO: checkFileIntegrity에서 분리
      */
@@ -101,7 +158,4 @@ public class FileManager {
         System.out.println("프로그램을 종료합니다.");
     }
 
-    public static void removeDuplicates(File wordFile) {
-
-    }
 }

@@ -3,6 +3,7 @@ package data;
 /**
  * 영어 단어와 뜻풀이를 담는 클래스입니다.
  */
+
 public class Word {
 
     private String word;
@@ -21,6 +22,12 @@ public class Word {
      * @param meaning 단어의 뜻풀이
      */
     public Word(String word, String meaning) {
+        this.word = word;
+        this.meaning = meaning;
+    }
+
+    public static Word of(String word, String meaning){
+        return new Word(word,meaning);
     }
 
     /**

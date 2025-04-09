@@ -102,7 +102,7 @@ public class BaseIO {
 
     /**
      * 현재 단어 목록을 파일에 저장합니다.
-     *
+     * @author 기찬
      * @param filePath 단어 데이터 파일 경로
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      */
@@ -111,7 +111,7 @@ public class BaseIO {
 
     /**
      * 새로운 단어를 목록에 추가하고 파일에 저장합니다.
-     *
+     * @author 기찬
      * @param word 추가할 Word 객체
      * @param filePath 단어 데이터 파일 경로
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
@@ -121,7 +121,7 @@ public class BaseIO {
 
     /**
      * 단어 목록에서 해당 단어를 제거하고 파일을 갱신합니다.
-     *
+     * @author 기찬
      * @param word 제거할 Word 객체
      * @param filePath 단어 데이터 파일 경로
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
@@ -131,7 +131,7 @@ public class BaseIO {
 
     /**
      * 현재 메모리상의 단어 목록을 반환합니다.
-     *
+     * @author 기찬
      * @return Word 객체 목록
      */
     public List<Word> getWordList() {
