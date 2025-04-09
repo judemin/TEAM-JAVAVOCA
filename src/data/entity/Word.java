@@ -1,4 +1,4 @@
-package data;
+package data.entity;
 
 /**
  * 영어 단어와 뜻풀이를 담는 클래스입니다.

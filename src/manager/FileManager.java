@@ -1,6 +1,7 @@
 package manager;
 
-import data.Word;
+import data.entity.Word;
+import data.repository.WordRepository;
 import enums.FilePath;
 import io.BaseIO;
 import io.WordFileIO;
@@ -11,10 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class FileManager {
+
+    private static final int NOT_EXIST = -1;
+    private static final String EMPTY_STRING = "";
 
     /**
      * 주어진 두 파일 경로에 해당하는 파일들의 존재여부와 권한을 검사합니다.
@@ -78,12 +81,78 @@ public class FileManager {
     public static void checkFileIntegrity(File file) {
         // 파일 무결성 확인
         try {
-            fileToIO.get(file.getName()).getMethod("loadWords").invoke(file.getName());
+            // IOException 발생시키면 파일 무결성에 문제가 있다는 뜻
+            // new IOException
+//        throw new IOException("파일 무결성 오류: " + filePath);
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            ArrayList<String> errorLineList = new ArrayList<>();
+            String line;
+            while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                checkLineIntegrity(line, errorLineList);
+            }
+            if(!errorLineList.isEmpty()){
+                System.out.println("파일의 중대한 결함 문제: 다음의 행이 문법 형식에 위배됩니다.");
+                errorLineList.forEach(System.out::println);
+                System.out.println("프로그램을 종료합니다.");
+                System.exit(1);
+            }
         } catch (Exception e) {
             exitProgram();
             // 원래 app.run() 에서 return 이었음!
             System.exit(1);
         }
+
+    }
+
+    /**
+     *
+     * @throws IOException 파일 무결성 위반 또는 읽기 도중 오류
+     *
+     */
+    private static void checkLineIntegrity(String line, ArrayList<String> errorLineList) throws IOException {
+        // 줄에 : 이 없으면
+        if (line.indexOf(':') == NOT_EXIST) {
+            errorLineList.add(line);
+            return;
+        }
+        // 줄에 :이 두 개 이상 있으면
+        if (line.indexOf(':') != line.lastIndexOf(':')) {
+            errorLineList.add(line);
+            return;
+        }
+        String[] parts = line.split(":", 2);
+        String word = parts[0].trim();
+        String explanation = parts[1].trim();
+
+
+        // page 14: 단어 문법 형식
+        // 단어의 길이는 1자 이상 50자 이하이어야 합니다.
+        if (word.length() > 50 || word.equals(EMPTY_STRING)) {
+            errorLineList.add(line);
+            return;
+        }
+        //전체 문자열은 알파벳(A-Z, a-z)으로만 구성됩니다.
+        //탭(\t)이나 개행 문자(\n), 문자열 내부 공백은 허용되지 않습니다.
+        String regexOfOnlyAlphabets = "^[A-Za-z]+$";
+        if (!word.matches(regexOfOnlyAlphabets)) {
+            errorLineList.add(line);
+            return;
+        }
+
+        // page 15: 뜻풀이 문법 형식
+        // 길이가 1이상 255자 이하이어야 합니다.
+        // 공백만으로 이루어진 문자열이 아니어야 합니다.
+        if (explanation.length() > 255 || explanation.equals(EMPTY_STRING)) {
+            errorLineList.add(line);
+            return;
+        }
+        // 영어 알파벳(A-Z, a-z) 및 표준 공백으로만 구성되어야 합니다.
+        if (!explanation.matches("^[A-Za-z ]+$")) {
+            errorLineList.add(line);
+            return;
+        }
+
     }
 
     public static void removeDuplicates(File file) {
@@ -143,10 +212,21 @@ public class FileManager {
     /*
     TODO: checkFileIntegrity에서 분리
      */
-    public static void loadFiles(File file) {
+    public static void loadFiles(File file, BaseIO io) {
+
+        WordRepository wordRepository = WordRepository.getInstance();
+
         // 파일 데이터를 WordFileIO, WrongFileIO 객체에 넣기
-        try {
-            fileToIO.get(file.getName()).getMethod("loadWords").invoke(file.getName());
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                String[] parts = line.split(":", 2);
+                String word = parts[0].trim();
+                String explanation = parts[1].trim();
+                WordRepository.addWord(Word.of(word,explanation));
+            }
+
         } catch (Exception e) {
             exitProgram();
             // 원래 app.run() 에서 return 이었음!
