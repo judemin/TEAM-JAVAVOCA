@@ -1,5 +1,7 @@
 package ui;
 
+import enums.FilePath;
+
 /**
  * JavaVoca 프로그램의 진입점입니다.
  */
@@ -11,7 +13,7 @@ public class Main {
      * @param args 명령행 인자
      */
     public static void main(String[] args) {
-        App app = new App("./words.txt", "wrong_answers.txt");
+        App app = new App();
         app.run();
     }
 }

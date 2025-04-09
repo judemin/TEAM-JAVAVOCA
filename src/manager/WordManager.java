@@ -1,6 +1,6 @@
 package manager;
 
-import data.Word;
+import data.entity.Word;
 import java.io.IOException;
 import java.util.List;
 
