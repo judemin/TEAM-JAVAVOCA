@@ -23,7 +23,7 @@ public class FileManager {
      * 주어진 두 파일 경로에 해당하는 파일들의 존재여부와 권한을 검사합니다.
      */
 
-    // TODO: wordfileIO와 wrongfileIO는 싱글톤으로
+
     static final HashMap<String, Class<? extends BaseIO>> fileToIO = (HashMap<String, Class<? extends BaseIO>>) Map.of(
             FilePath.WORDS.getPath(), WordFileIO.class,
             FilePath.WRONG_ANSWERS.getPath(), WrongFileIO.class
@@ -51,7 +51,6 @@ public class FileManager {
         if (homePath == null || homePath.trim().isEmpty()) {
             System.out.print("!!! 오류: 홈 경로를 파악할 수 없습니다! ");
             exitProgram();
-            System.exit(1);
         }
         return homePath;
     }
@@ -60,7 +59,6 @@ public class FileManager {
         if (!file.exists()) {
             System.out.print("!!! 오류: 홈 경로에 "+file.getName()+" 데이터 파일이 없습니다! ");
             exitProgram();
-            System.exit(1);
         }
     }
 
@@ -73,7 +71,6 @@ public class FileManager {
                     + "\n에 대한 입출력 권한이 없습니다! ";
             System.out.print(errorMessage);
             exitProgram();
-            System.exit(1);
         }
 
     }
@@ -99,8 +96,6 @@ public class FileManager {
             }
         } catch (Exception e) {
             exitProgram();
-            // 원래 app.run() 에서 return 이었음!
-            System.exit(1);
         }
 
     }
@@ -189,15 +184,12 @@ public class FileManager {
 
         } catch (Exception e) {
             exitProgram();
-            // 원래 app.run() 에서 return 이었음!
-            System.exit(1);
         }
 
         try {
             Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             exitProgram();
-            System.exit(1);
         }
 
         // 중복 제거 결과 출력
@@ -209,9 +201,7 @@ public class FileManager {
         );
     }
 
-    /*
-    TODO: checkFileIntegrity에서 분리
-     */
+
     public static void loadFiles(File file, BaseIO io) {
 
         WordRepository wordRepository = WordRepository.getInstance();
@@ -229,13 +219,12 @@ public class FileManager {
 
         } catch (Exception e) {
             exitProgram();
-            // 원래 app.run() 에서 return 이었음!
-            System.exit(1);
         }
     }
 
     private static void exitProgram() {
         System.out.println("프로그램을 종료합니다.");
+        System.exit(1);
     }
 
 }
