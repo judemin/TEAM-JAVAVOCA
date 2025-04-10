@@ -30,6 +30,10 @@ public class WordRepository {
         words.add(word);
     }
 
+    public static List<Word> getWordsList(){
+        return words;
+    }
+
     // 더 필요한 메서드 있으면 추가
     public static void removeWord(Word word){
         words.removeIf(entry ->
