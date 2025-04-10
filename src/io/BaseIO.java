@@ -4,8 +4,6 @@ import data.entity.Word;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseIO {
     // 싱글톤 객체임.
@@ -15,7 +13,7 @@ public class BaseIO {
         baseIO = new BaseIO();
     }
 
-    private BaseIO(){}
+    protected BaseIO(){}
 
     public static BaseIO getInstance(){
         return baseIO;
