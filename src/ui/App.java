@@ -1,5 +1,7 @@
 package ui;
 
+import data.repository.SavedWordRepository;
+import data.repository.WrongWordRepository;
 import enums.FilePath;
 import manager.FileManager;
 import manager.QuizManager;
@@ -51,8 +53,8 @@ public class App {
         FileManager.removeDuplicates(wordFile);
         FileManager.removeDuplicates(wordFile);
 
-        FileManager.loadFiles(wordFile);
-        FileManager.loadFiles(wrongFile);
+        FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
+        FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
 
         while(true){
             // TODO: 에러 메세지 출력을 할지 말지 (수정사항)
