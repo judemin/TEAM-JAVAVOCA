@@ -36,7 +36,7 @@ public class Word {
      * @return 단어 문자열
      */
     public String getWord() {
-        return null;
+        return this.word;
     }
 
     /**
@@ -44,8 +44,7 @@ public class Word {
      *
      * @param word 설정할 영어 단어
      */
-    public void setWord(String word) {
-    }
+    public void setWord(String word) { this.word = word; }
 
     /**
      * 단어의 뜻풀이를 반환합니다.
@@ -53,7 +52,7 @@ public class Word {
      * @return 뜻풀이 문자열
      */
     public String getMeaning() {
-        return null;
+        return this.meaning;
     }
 
     /**
@@ -61,8 +60,7 @@ public class Word {
      *
      * @param meaning 설정할 뜻풀이
      */
-    public void setMeaning(String meaning) {
-    }
+    public void setMeaning(String meaning) { this.meaning = meaning; }
 
     /**
      * 단어 레코드의 문자열 표현을 반환합니다.
@@ -71,6 +69,6 @@ public class Word {
      */
     @Override
     public String toString() {
-        return null;
+        return this.word + ": " + this.meaning;
     }
 }
