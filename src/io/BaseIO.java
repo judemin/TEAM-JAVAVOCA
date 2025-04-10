@@ -1,7 +1,7 @@
 package io;
 
 import data.entity.Word;
-import data.repository.WordRepository;
+import data.repository.SavedWordRepository;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,7 +31,7 @@ public class BaseIO {
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      */
     public static void saveWords(File file) throws IOException {
-        List<Word> wordList = WordRepository.getWordsList();
+        List<Word> wordList = SavedWordRepository.getWordsList();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (Word word : wordList) {
                 writer.write(word.getWord() + " : " + word.getMeaning());
@@ -48,7 +48,7 @@ public class BaseIO {
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      */
     public static void addWord(File file, Word word) throws IOException {
-        List<Word> wordList = WordRepository.getWordsList();
+        List<Word> wordList = SavedWordRepository.getWordsList();
         for (Word w : wordList) {
             if (w.equals(word)) {
                 System.out.println("이미 존재하는 단어입니다. 다시 입력해 주세요.");
@@ -71,7 +71,7 @@ public class BaseIO {
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      */
     public static void removeWord(File file, Word word) throws IOException {
-        List<Word> wordList = WordRepository.getWordsList();
+        List<Word> wordList = SavedWordRepository.getWordsList();
         boolean removed = wordList.removeIf(w -> w.equals(word));
         if (removed) {
             saveWords(file);

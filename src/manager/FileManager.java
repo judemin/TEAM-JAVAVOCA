@@ -1,18 +1,14 @@
 package manager;
 
 import data.entity.Word;
-import data.repository.WordRepository;
+import data.repository.SavedWordRepository;
 import enums.FilePath;
-import io.BaseIO;
-import io.WordFileIO;
-import io.WrongFileIO;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class FileManager {
 
@@ -197,7 +193,7 @@ public class FileManager {
 
     public static void loadFiles(File file) {
 
-        WordRepository wordRepository = WordRepository.getInstance();
+        SavedWordRepository savedWordRepository = SavedWordRepository.getInstance();
 
         // 파일 데이터를 WordFileIO, WrongFileIO 객체에 넣기
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -207,7 +203,7 @@ public class FileManager {
                 String[] parts = line.split(":", 2);
                 String word = parts[0].trim();
                 String explanation = parts[1].trim();
-                WordRepository.addWord(Word.of(word,explanation));
+                SavedWordRepository.addWord(Word.of(word,explanation));
             }
 
         } catch (Exception e) {
