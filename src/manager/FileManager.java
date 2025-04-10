@@ -23,13 +23,6 @@ public class FileManager {
      * 주어진 두 파일 경로에 해당하는 파일들의 존재여부와 권한을 검사합니다.
      */
 
-
-    static final HashMap<String, Class<? extends BaseIO>> fileToIO = (HashMap<String, Class<? extends BaseIO>>) Map.of(
-            FilePath.WORDS.getPath(), WordFileIO.class,
-            FilePath.WRONG_ANSWERS.getPath(), WrongFileIO.class
-    );
-
-
     public static File getFile(FilePath fp) {
         // TODO: 5.4 무결성 확인 및 처리 - 1. 항목이 이상하게 들여쓰기 되어있음
 
@@ -202,7 +195,7 @@ public class FileManager {
     }
 
 
-    public static void loadFiles(File file, BaseIO io) {
+    public static void loadFiles(File file) {
 
         WordRepository wordRepository = WordRepository.getInstance();
 
