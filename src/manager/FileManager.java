@@ -205,6 +205,9 @@ public class FileManager {
             String line;
 
             while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                if(line.trim().isEmpty()){
+                    continue;
+                }
                 String[] parts = line.split(":", 2);
                 String word = parts[0].trim();
                 String explanation = parts[1].trim();
