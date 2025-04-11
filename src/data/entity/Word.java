@@ -8,9 +8,6 @@ import lombok.AllArgsConstructor;
  * 영어 단어와 뜻풀이를 담는 클래스입니다.
  */
 
-@Getter
-@Setter
-@AllArgsConstructor
 public class Word {
 
     private String word;
@@ -34,5 +31,26 @@ public class Word {
     @Override
     public String toString() {
         return this.word + ": " + this.meaning;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+    public String getMeaning() {
+        return meaning;
+    }
+
+    public void setMeaning(String meaning) {
+        this.meaning = meaning;
+    }
+
+    public Word(String word, String meaning) {
+        this.word = word;
+        this.meaning = meaning;
     }
 }
