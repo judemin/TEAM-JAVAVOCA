@@ -17,7 +17,7 @@ public class WrongFileIO extends BaseIO {
         wrongFileIO = new WrongFileIO();
     }
 
-    public static WrongFileIO getInstance(){
+    public static WrongFileIO getInstance() {
         return wrongFileIO;
     }
 
