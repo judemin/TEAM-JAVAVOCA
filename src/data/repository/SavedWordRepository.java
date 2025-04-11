@@ -10,7 +10,7 @@ public class SavedWordRepository extends BaseRepository {
         SAVED_WORD_REPOSITORY = new SavedWordRepository();
     }
 
-    private SavedWordRepository(){
+    private SavedWordRepository() {
         words = new ArrayList<>();
     }
 
