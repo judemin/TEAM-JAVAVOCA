@@ -96,6 +96,9 @@ public class FileManager {
      *
      */
     private static void checkLineIntegrity(String line, ArrayList<String> errorLineList) throws IOException {
+        if(line.trim().isEmpty()){
+            return;
+        }
         // 줄에 : 이 없으면
         if (line.indexOf(':') == NOT_EXIST) {
             errorLineList.add(line);
@@ -142,14 +145,18 @@ public class FileManager {
 
     public static void removeDuplicates(File file) {
         HashMap<String, String> recordMap = new HashMap<>();
-        ArrayList<String> duplicatedWordList = new ArrayList<>();
-        ArrayList<String> duplicatedExplanationList = new ArrayList<>();
+        ArrayList<String> duplicatedList = new ArrayList<>();
         ArrayList<String> filteredLines = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
 
             while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                if(line.trim().isEmpty()){
+                    filteredLines.add(line);
+                    continue;
+                }
+
                 String[] parts = line.split(":", 2);
                 String word = parts[0].trim();
                 String explanation = parts[1].trim();
@@ -157,12 +164,12 @@ public class FileManager {
                 if (recordMap.containsKey(word)) {
                     // 단어가 이미 존재하면 현재 라인을 제거(추가하지 않음)
                     // 중복 단어 리스트에 단어 추가
-                    duplicatedWordList.add(word);
+                    duplicatedList.add("단어 " + word);
                     continue;
                 } else if (recordMap.containsValue(explanation)) {
                     // 뜻풀이가 이미 존재하면 현재 라인을 제거(추가하지 않음)
                     // 중복 뜻풀이 리스트에 뜻풀이 추가
-                    duplicatedExplanationList.add(explanation);
+                    duplicatedList.add("뜻풀이 " + explanation);
                     continue;
                 } else {
                     // 중복이 없으면 기록하고, 유효한 라인 목록에 추가
@@ -183,11 +190,8 @@ public class FileManager {
         }
 
         // 중복 제거 결과 출력
-        duplicatedWordList.forEach(w ->
-                System.out.println("성공적으로 중복 데이터 레코드를 제거했습니다. 사유: 중복인 단어 " + w)
-        );
-        duplicatedExplanationList.forEach(e ->
-                System.out.println("성공적으로 중복 데이터 레코드를 제거했습니다. 사유: 중복인 뜻풀이 " + e)
+        duplicatedList.forEach(w ->
+                System.out.println("성공적으로 중복 데이터 레코드를 제거했습니다. 사유: 중복인 " + w)
         );
     }
 
