@@ -9,7 +9,7 @@ public enum FilePath {
         return path;
     }
 
-    private FilePath(String path){
+    private FilePath(String path) {
         this.path = path;
     }
 }

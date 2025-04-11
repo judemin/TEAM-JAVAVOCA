@@ -10,7 +10,7 @@ public class WrongWordRepository extends BaseRepository {
         WRONG_WORD_REPOSITORY = new WrongWordRepository();
     }
 
-    private WrongWordRepository(){
+    private WrongWordRepository() {
         words = new ArrayList<>();
     }
 

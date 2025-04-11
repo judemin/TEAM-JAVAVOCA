@@ -16,8 +16,14 @@ public class Word {
     private String word;
     private String meaning;
 
-    public static Word of(String word, String meaning){
-        return new Word(word,meaning);
+    /**
+     * 단어의 생성자 입니다.
+     * @param word
+     * @param meaning
+     * @return
+     */
+    public static Word of(String word, String meaning) {
+        return new Word(word, meaning);
     }
 
     /**

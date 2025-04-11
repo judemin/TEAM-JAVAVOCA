@@ -1,8 +1,15 @@
 package manager;
 
 import data.entity.Word;
+import data.repository.BaseRepository;
+import enums.FilePath;
+import io.BaseIO;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * 단어 데이터를 관리하는 클래스입니다.
@@ -10,16 +17,19 @@ import java.util.List;
  */
 public class WordManager {
 
-    /** 프로그램이 관리하는 전체 단어 목록 */
-    private List<Word> words;
-
-    /** 단어 데이터 파일 경로 */
-    private String wordFilePath;
+    /**
+     * baseRepository: 가져올 WordRepository
+     * baseIO: 파일 저장을 위한 클래스
+     */
+    private final BaseRepository baseRepository;
+    private final BaseIO baseIO;
 
     /**
      * WordManager를 초기화합니다.
      */
-    public WordManager(){
+    public WordManager(BaseRepository baseRepository, BaseIO baseIO) {
+        this.baseRepository = baseRepository;
+        this.baseIO = baseIO;
     }
 
     /**
@@ -28,7 +38,7 @@ public class WordManager {
      * @return Word 객체 목록
      */
     public List<Word> getAllWords() {
-        return null;
+        return baseRepository.getWordsList();
     }
 
     /**
@@ -36,7 +46,57 @@ public class WordManager {
      * 단어 추가, 수정, 삭제 중 하나를 선택하고 해당 기능을 실행합니다.
      */
     public void handleWordManagementMenu() {
-        System.out.println("[handleWordManagementMenu]");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n=== 단어 관리 메뉴 ===");
+            System.out.println("1. 단어 추가");
+            System.out.println("2. 단어 수정");
+            System.out.println("3. 단어 삭제");
+            System.out.println("0. 종료");
+            System.out.print("선택: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // 개행 제거
+
+            try {
+                if (choice == 1) {
+                    System.out.print("추가할 단어: ");
+                    String word = scanner.nextLine();
+                    System.out.print("뜻풀이: ");
+                    String meaning = scanner.nextLine();
+                    if (addWord(word, meaning)) {
+                        System.out.println("단어가 추가되었습니다.");
+                    } else {
+                        System.out.println("이미 존재하는 단어입니다.");
+                    }
+                } else if (choice == 2) {
+                    System.out.print("수정할 기존 단어: ");
+                    String original = scanner.nextLine();
+                    System.out.print("새 단어: ");
+                    String newWord = scanner.nextLine();
+                    System.out.print("새 뜻풀이: ");
+                    String newMeaning = scanner.nextLine();
+                    if (updateWord(original, newWord, newMeaning)) {
+                        System.out.println("단어가 수정되었습니다.");
+                    } else {
+                        System.out.println("해당 단어를 찾을 수 없습니다.");
+                    }
+                } else if (choice == 3) {
+                    System.out.print("삭제할 단어: ");
+                    String word = scanner.nextLine();
+                    if (removeWord(word)) {
+                        System.out.println("단어가 삭제되었습니다.");
+                    } else {
+                        System.out.println("해당 단어를 찾을 수 없습니다.");
+                    }
+                } else if (choice == 0) {
+                    break;
+                } else {
+                    System.out.println("잘못된 입력입니다.");
+                }
+            } catch (IOException e) {
+                System.out.println("파일 저장 중 오류가 발생했습니다: " + e.getMessage());
+            }
+        }
     }
 
     /**
@@ -48,7 +108,14 @@ public class WordManager {
      * @throws IOException 파일 저장 중 오류가 발생한 경우
      */
     public boolean addWord(String word, String meaning) throws IOException {
-        return false;
+        for (Word w : baseRepository.getWordsList()) {
+            if (w.getWord().equalsIgnoreCase(word)) {
+                return false; // 중복 단어
+            }
+        }
+        baseRepository.addWord(new Word(word, meaning));
+        baseIO.addWord(FileManager.getFile(FilePath.WORDS), new Word(word, meaning));
+        return true;
     }
 
     /**
@@ -61,6 +128,19 @@ public class WordManager {
      * @throws IOException 파일 저장 중 오류가 발생한 경우
      */
     public boolean updateWord(String originalWord, String newWord, String newMeaning) throws IOException {
+        for (Word w : baseRepository.getWordsList()) {
+            if (w.getWord().equalsIgnoreCase(originalWord)) {
+                baseIO.removeWord(FileManager.getFile(FilePath.WORDS), w);
+                baseRepository.removeWord(w);
+
+                w.setWord(newWord);
+                w.setMeaning(newMeaning);
+
+                baseIO.addWord(FileManager.getFile(FilePath.WORDS), w);
+                baseRepository.addWord(w);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -72,6 +152,15 @@ public class WordManager {
      * @throws IOException 파일 저장 중 오류가 발생한 경우
      */
     public boolean removeWord(String word) throws IOException {
+        Iterator<Word> iterator = baseRepository.getWordsList().iterator();
+        while (iterator.hasNext()) {
+            Word w = iterator.next();
+            if (w.getWord().equalsIgnoreCase(word)) {
+                iterator.remove();
+                baseIO.removeWord(FileManager.getFile(FilePath.WORDS), w);
+                return true;
+            }
+        }
         return false;
     }
 }
