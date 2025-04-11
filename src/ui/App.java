@@ -3,6 +3,9 @@ package ui;
 import data.repository.SavedWordRepository;
 import data.repository.WrongWordRepository;
 import enums.FilePath;
+import io.BaseIO;
+import io.WordFileIO;
+import io.WrongFileIO;
 import manager.FileManager;
 import manager.QuizManager;
 import manager.SearchManager;
@@ -24,12 +27,11 @@ public class App {
 
     /**
      * App을 초기화합니다. 데이터 파일을 로드하고 필요한 매니저 객체들을 생성합니다.
-     *
      */
     public App() {
-        this.wordManager = new WordManager();
-        this.quizManager = new QuizManager();
-        this.searchManager = new SearchManager();
+        this.wordManager = new WordManager(SavedWordRepository.getInstance(), WordFileIO.getInstance());
+        this.quizManager = new QuizManager(SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WordFileIO.getInstance());
+        this.searchManager = new SearchManager(SavedWordRepository.getInstance());
         this.scanner = new Scanner(System.in);
     }
 
@@ -56,14 +58,14 @@ public class App {
         FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
         FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
 
-        while(true){
+        while (true) {
             // TODO: 에러 메세지 출력을 할지 말지 (수정사항)
             // 만일 주 프롬프트에서 그냥 곧바로 Enter ⏎ 키만 누르거나 (즉, 빈 문자열 입력),
             // 공백류(들)만 입력하거나, 입력 중 첫번째 단어가 메뉴 항목 번호가 아닐 경우,
             // 틀린 입력으로 간주하고 (“잘못된 입력입니다.”같은 진부한 안내 없이, 조용히)
             // 표1에 준하는 표준 메뉴 항목 번호 및 인자 안내 화면을 출력하고 주 프롬프트로 되돌아갑니다
             String input = displayMainMenu();
-            if (!input.isEmpty()){
+            if (!input.isEmpty()) {
                 String[] tokens = input.split("\\s+");
                 String command = tokens[0];
                 if (command.matches("[1-4]")) {
