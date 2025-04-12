@@ -3,12 +3,11 @@ package manager;
 import data.entity.Word;
 import data.repository.BaseRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * 부분 문자열로 단어나 뜻을 검색하는 기능을 제공합니다.
+ * 정확히 일치하는 단어를 검색하는 기능을 제공합니다.
  */
 public class SearchManager {
 
@@ -25,69 +24,61 @@ public class SearchManager {
     }
 
     /**
-     * 단어 검색 기능을 처리합니다. 검색 기준(단어 또는 뜻풀이)을 선택하고 검색을 수행합니다.
+     * 단어 검색 기능을 처리합니다. 사용자 입력을 받고 유효성 검사 및 정확히 일치하는 단어를 검색합니다.
      */
-    public void handleSearchMenu() {
+    public void handleExactWordSearchMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n=== 검색 메뉴 ===");
-        System.out.println("1. 영어 단어로 검색");
-        System.out.println("2. 뜻풀이로 검색");
-        System.out.print("선택: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // 개행 제거
 
-        System.out.print("검색어 입력: ");
-        String keyword = scanner.nextLine();
+        while (true) {
+            System.out.println("검색할 단어를 입력해주세요");
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.print("Javavoca > ");
+            String rawInput = scanner.nextLine();
 
-        List<Word> result;
-        if (choice == 1) {
-            result = searchByWord(keyword);
-        } else if (choice == 2) {
-            result = searchByMeaning(keyword);
-        } else {
-            System.out.println("잘못된 선택입니다.");
-            return;
-        }
-
-        System.out.println("\n검색 결과:");
-        if (result.isEmpty()) {
-            System.out.println("검색 결과가 없습니다.");
-        } else {
-            for (Word word : result) {
-                System.out.println(word.getWord() + " : " + word.getMeaning());
+            // 공백 포함되거나 영단어가 아닐 경우
+            if (!isValidEnglishWord(rawInput)) {
+                System.out.println("잘못된 영단어 입력입니다!");
+                continue;
             }
+
+            String input = rawInput.trim(); // 정상 입력일 경우만 trim
+
+            Word found = findExactWord(input.toLowerCase());
+
+            if (found != null) {
+                System.out.println(found.getWord().toLowerCase() + ":" + found.getMeaning());
+            } else {
+                System.out.println("일치하는 단어 레코드가 없습니다!");
+            }
+
+            System.out.println("-----------------------------------------------------------------------------------------");
+            break;
         }
     }
 
     /**
-     * 주어진 문자열이 포함된 영어 단어를 모두 검색하여 반환합니다.
+     * 사용자 입력값이 유효한 영단어 형식인지 검사합니다. (앞뒤 공백 포함 금지)
      *
-     * @param keyword 검색할 영단어 문자열 (부분 일치)
-     * @return 검색된 Word 객체 목록 (영단어 기준)
+     * @param input 입력값
+     * @return 유효 여부
      */
-    public List<Word> searchByWord(String keyword) {
-        List<Word> result = new ArrayList<>();
-        for (Word word : baseRepository.getWordsList()) {
-            if (word.getWord().toLowerCase().contains(keyword.toLowerCase())) {
-                result.add(word);
-            }
-        }
-        return result;
+    private boolean isValidEnglishWord(String input) {
+        return input.equals(input.trim()) && input.matches("^[a-zA-Z]+$");
     }
 
     /**
-     * 주어진 문자열이 포함된 뜻풀이를 모두 검색하여 반환합니다.
+     * 정확히 일치하는 단어를 검색합니다 (대소문자 구분 없이).
      *
-     * @param keyword 검색할 뜻풀이 문자열 (부분 일치)
-     * @return 검색된 Word 객체 목록 (뜻풀이 기준)
+     * @param keyword 찾고자 하는 영단어 (소문자 기준)
+     * @return 일치하는 Word 객체, 없으면 null
      */
-    public List<Word> searchByMeaning(String keyword) {
-        List<Word> result = new ArrayList<>();
-        for (Word word : baseRepository.getWordsList()) {
-            if (word.getMeaning().toLowerCase().contains(keyword.toLowerCase())) {
-                result.add(word);
+    private Word findExactWord(String keyword) {
+        List<Word> wordList = baseRepository.getWordsList();
+        for (Word word : wordList) {
+            if (word.getWord().equalsIgnoreCase(keyword)) {
+                return word;
             }
         }
-        return result;
+        return null;
     }
 }

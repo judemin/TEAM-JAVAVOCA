@@ -2,7 +2,6 @@ package manager;
 
 import data.entity.Word;
 import data.repository.BaseRepository;
-import data.repository.SavedWordRepository;
 import enums.FilePath;
 
 import java.io.*;

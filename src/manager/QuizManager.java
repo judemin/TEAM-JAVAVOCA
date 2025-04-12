@@ -4,12 +4,12 @@ import data.entity.Word;
 import data.repository.BaseRepository;
 import enums.FilePath;
 import io.BaseIO;
-import io.WrongFileIO;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,21 +48,24 @@ public class QuizManager {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
                 System.out.println("====== 퀴즈 모드 선택 ======");
-                System.out.println("1. 일반 단어 퀴즈");
-                System.out.println("2. 오답 단어 퀴즈");
-                System.out.println("0. 뒤로가기");
+                System.out.println("1(일반 모드) / 2(오답 퀴즈 모드)");
                 System.out.print("번호를 선택하세요: ");
                 String input = br.readLine();
+                String[] tokens = input.trim().split("\\s+");
 
-                switch (input) {
+                // 인자가 2개 이상일 경우
+                if (tokens.length != 1) {
+                    System.out.println(".!! 오류: 이 명령은 인자를 받지 않습니다!\n");
+                    continue;
+                }
+
+                switch (tokens[0]) {
                     case "1":
-                        startQuiz(false);
+                        if (!startQuiz(false)) return;
                         break;
                     case "2":
-                        startQuiz(true);
+                        if (!startQuiz(true)) return;
                         break;
-                    case "0":
-                        return;
                     default:
                         System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
                 }
@@ -78,66 +81,95 @@ public class QuizManager {
      * @param useWrongMode true이면 오답 퀴즈 모드로, false이면 일반 모드로 퀴즈를 진행합니다.
      * @throws IOException 퀴즈 진행 중 입출력 오류가 발생한 경우
      */
-    public void startQuiz(boolean useWrongMode) throws IOException {
-
+    public boolean startQuiz(boolean useWrongMode) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        List<Word> quizList = useWrongMode ? wrongWordRepository.getWordsList() : savedWordRepository.getWordsList();
+        List<Word> originalList = useWrongMode
+                ? new ArrayList<>(wrongWordRepository.getWordsList()) // ← 깊은 복사
+                : savedWordRepository.getWordsList();
 
-        if (quizList.isEmpty()) {
-            System.out.println("문제가 없습니다. 퀴즈를 진행할 수 없습니다.");
-            return;
+        int totalSize = originalList.size();
+        System.out.println("→ 저장된 단어 수: " + totalSize + "개");
+
+        if (totalSize == 0) {
+            System.out.println("맞은 개수: 0개");
+            System.out.println("틀린 개수: 0개");
+            return false;
         }
 
-        Collections.shuffle(quizList);
+        List<Word> quizList;
+        if (totalSize < 10) {
+            if (useWrongMode) System.out.println("→ 오답 단어가 10개 미만이므로 모두 출제합니다.");
+            else System.out.println("→ 모든 단어를 퀴즈로 출제합니다.");
+            quizList = originalList;
+        } else {
+            System.out.println("→ 무작위로 10개의 단어를 선택하여 퀴즈를 출제합니다.");
+            Collections.shuffle(originalList);
+            quizList = originalList.subList(0, 10);
+        }
+
         int correctCount = 0;
+        int wrongCount = 0;
 
-        for (Word question : quizList) {
-            System.out.println("뜻: " + question.getMeaning());
-            System.out.print("입력: ");
-            String userAnswer = br.readLine();
+        for (int i = 0; i < quizList.size(); i++) {
+            Word question = quizList.get(i);
+            String answer = question.getWord();
 
-            if (checkAnswer(question, userAnswer)) {
-                System.out.println("정답입니다!");
-                correctCount++;
-            } else {
-                System.out.println("오답입니다.");
-                File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
-                wrongFileIO.addWord(wrongFile, question);
-                wrongWordRepository.addWord(question);
+            System.out.println((i + 1) + ". " + question.getMeaning());
+            System.out.println("글자수: " + answer.length());
+
+            int attempts = 0;
+            boolean isCorrect = false;
+
+            while (attempts < 3) {
+                System.out.print("> ");
+                String rawInput = br.readLine();
+                String userInput = rawInput.trim();
+
+                if (!userInput.matches("^[a-zA-Z]+$") || !rawInput.equals(userInput)) {
+                    System.out.println(".!! 오류: 올바른 단어 형식을 입력해주세요. (공백 미 포함 영어만 입력가능)");
+                    continue;
+                }
+
+                if (userInput.equalsIgnoreCase(answer)) {
+                    correctCount++;
+                    isCorrect = true;
+
+                    // 오답 퀴즈 모드일 경우: 정답 맞추면 해당 단어 오답 파일에서 제거
+                    if (useWrongMode) {
+                        File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
+                        wrongFileIO.removeWord(wrongFile, question);
+                        System.out.println("맞았습니다! 위 단어는 오답 데이터 파일에서 삭제됩니다.");
+                    } else {
+                        System.out.println("맞았습니다!");
+                    }
+
+                    break;
+                } else {
+                    attempts++;
+                    if (attempts == 1) {
+                        System.out.println("틀렸습니다! 시도 횟수: 1, 첫글자: " + answer.charAt(0));
+                    } else if (attempts == 2) {
+                        System.out.println("틀렸습니다! 시도 횟수: 2, 마지막글자: " + answer.charAt(answer.length() - 1));
+                    } else {
+                        System.out.println("시도 횟수가 초과되었습니다. 다음 문제로 넘어갑니다.");
+                    }
+                }
             }
+
+            if (!isCorrect) {
+                // 일반 모드에서만 오답 파일에 저장
+                if (!useWrongMode) {
+                    File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
+                    wrongFileIO.addWord(wrongFile, question);
+                }
+                wrongCount++;
+            }
+
             System.out.println();
         }
-        System.out.println("퀴즈 종료! 맞힌 개수: " + correctCount + "/" + quizList.size());
-    }
 
-    /**
-     * 사용자 입력 답안을 확인하여 정답 여부를 반환합니다.
-     *
-     * @param question   문제로 출제된 Word 객체 (뜻풀이를 사용자에게 제시한 단어)
-     * @param userAnswer 사용자가 입력한 답안 (영단어)
-     * @return 정답이면 true, 오답이면 false
-     */
-    public boolean checkAnswer(Word question, String userAnswer) {
-        // 양쪽 공백 제거 후, 대소문자 구분 없이 정답 여부 반환
-        return question.getWord().equalsIgnoreCase(userAnswer.trim());
-    }
-
-    /**
-     * 지정된 단어에 대해 힌트를 제공합니다. 힌트 레벨에 따라 단어의 일부 문자 정보를 반환합니다.
-     *
-     * @param question  문제로 출제된 Word 객체
-     * @param hintLevel 힌트 레벨 (1이면 첫 글자, 2이면 마지막 글자 제공)
-     * @return 힌트 문자열
-     */
-    public String getHint(Word question, int hintLevel) {
-        String word = question.getWord();
-        switch (hintLevel) {
-            case 1:
-                return "첫 글자: " + word.charAt(0);
-            case 2:
-                return "마지막 글자: " + word.charAt(word.length() - 1);
-            default:
-                return "힌트가 없습니다.";
-        }
+        System.out.println("맞은 개수: " + correctCount + "개");
+        System.out.println("틀린 개수: " + wrongCount + "개");
+        return true;
     }
 }
