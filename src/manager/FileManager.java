@@ -2,7 +2,6 @@ package manager;
 
 import data.entity.Word;
 import data.repository.BaseRepository;
-import data.repository.SavedWordRepository;
 import enums.FilePath;
 
 import java.io.*;
@@ -198,8 +197,6 @@ public class FileManager {
 
     public static void loadFiles(File file, BaseRepository repositoryType) {
 
-        BaseRepository repository = repositoryType;
-
         // 파일 데이터를 WordFileIO, WrongFileIO 객체에 넣기
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
@@ -208,7 +205,7 @@ public class FileManager {
                 String[] parts = line.split(":", 2);
                 String word = parts[0].trim();
                 String explanation = parts[1].trim();
-                repository.addWord(Word.of(word,explanation));
+                repositoryType.addWord(Word.of(word,explanation));
             }
 
         } catch (Exception e) {

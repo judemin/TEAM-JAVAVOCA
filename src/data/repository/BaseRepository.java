@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public abstract class BaseRepository {
     // 메모리 상의 단어 목록
-    static protected List<Word> words;
+    protected List<Word> words;
 
     public void addWord(Word word) {
         words.add(word);

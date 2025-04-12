@@ -2,6 +2,8 @@ package ui;
 
 import enums.FilePath;
 
+import java.io.IOException;
+
 /**
  * JavaVoca 프로그램의 진입점입니다.
  */
@@ -12,7 +14,7 @@ public class Main {
      *
      * @param args 명령행 인자
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         App app = new App();
         app.run();
     }

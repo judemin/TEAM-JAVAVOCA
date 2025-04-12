@@ -12,6 +12,7 @@ import manager.SearchManager;
 import manager.WordManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -29,8 +30,8 @@ public class App {
      * App을 초기화합니다. 데이터 파일을 로드하고 필요한 매니저 객체들을 생성합니다.
      */
     public App() {
-        this.wordManager = new WordManager(SavedWordRepository.getInstance(), WordFileIO.getInstance());
-        this.quizManager = new QuizManager(SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WordFileIO.getInstance());
+        this.wordManager = new WordManager(new Scanner(System.in), SavedWordRepository.getInstance(), WordFileIO.getInstance());
+        this.quizManager = new QuizManager(SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WrongFileIO.getInstance());
         this.searchManager = new SearchManager(SavedWordRepository.getInstance());
         this.scanner = new Scanner(System.in);
     }
@@ -38,7 +39,7 @@ public class App {
     /**
      * 프로그램의 메인 실행 루프를 시작합니다. 메인 메뉴를 표시하고 사용자의 선택을 처리합니다.
      */
-    public void run() {
+    public void run() throws IOException {
 
         // 홈경로, 파일 존재, 입출력 권한 확인
         // 분리
@@ -74,10 +75,10 @@ public class App {
                             quizManager.handleQuizMenu();
                             break;
                         case "2":
-                            searchManager.handleSearchMenu();
+                            searchManager.handleExactWordSearchMenu();
                             break;
                         case "3":
-                            wordManager.handleWordManagementMenu();
+                            wordManager.run();
                             break;
                         case "4":
                             exitProgram();

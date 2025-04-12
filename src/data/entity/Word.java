@@ -1,9 +1,5 @@
 package data.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.AllArgsConstructor;
-
 /**
  * 영어 단어와 뜻풀이를 담는 클래스입니다.
  */
