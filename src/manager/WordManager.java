@@ -69,7 +69,7 @@ public class WordManager {
 
         String word = removePromptWord();
         Word existingWord = records.stream()
-                .filter(w -> w.getWord().equals(word))
+                .filter(w -> w.getWord().equalsIgnoreCase(word))
                 .findFirst()
                 .orElse(null);
 
@@ -95,7 +95,7 @@ public class WordManager {
 
         String word = removePromptWord();
         Word existingWord = records.stream()
-                .filter(w -> w.getWord().equals(word))
+                .filter(w -> w.getWord().equalsIgnoreCase(word))
                 .findFirst()
                 .orElse(null);
 
@@ -109,7 +109,7 @@ public class WordManager {
         if (confirmSave(word, meaning)) {
             records.remove(existingWord);
             records.add(Word.of(word, meaning));
-            wordFileIO.saveWords(FileManager.getFile(FilePath.WORDS)); // 파일 전체 저장
+            wordFileIO.editWordInFile(FileManager.getFile(FilePath.WORDS),Word.of(word, meaning)); // 파일 전체 저장
             System.out.println("단어가 수정되었습니다.");
         }
     }

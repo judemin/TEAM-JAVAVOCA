@@ -21,11 +21,6 @@ public class WordFileIO extends BaseIO {
         return wordFileIO;
     }
 
-    @Override
-    public void saveWords(File file) throws IOException {
-        List<Word> wordList = SavedWordRepository.getInstance().getWordsList();
-        writeWordListInFile(file, wordList);
-    }
 
     @Override
     public void addWord(File file, Word word) throws IOException {

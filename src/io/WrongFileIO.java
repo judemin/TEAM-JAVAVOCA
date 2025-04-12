@@ -22,12 +22,6 @@ public class WrongFileIO extends BaseIO {
     }
 
     @Override
-    public void saveWords(File file) throws IOException {
-        List<Word> wordList = WrongWordRepository.getInstance().getWordsList();
-        writeWordListInFile(file, wordList);
-    }
-
-    @Override
     public void addWord(File file, Word word) throws IOException {
         List<Word> wordList = WrongWordRepository.getInstance().getWordsList();
         addWordIfDistinct(file, word, wordList);
