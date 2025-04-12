@@ -61,11 +61,11 @@ public class QuizManager {
 
                 switch (tokens[0]) {
                     case "1":
-                        if (!startQuiz(false)) return;
-                        break;
+                        startQuiz(false);
+                        return;
                     case "2":
-                        if (!startQuiz(true)) return;
-                        break;
+                        startQuiz(true);
+                        return;
                     default:
                         System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
                 }

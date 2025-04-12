@@ -34,13 +34,13 @@ public class WordManager {
             switch (choice) {
                 case "1":
                     addWord();
-                    break;
+                    return;
                 case "2":
                     updateWord();
-                    break;
+                    return;
                 case "3":
                     removeWord();
-                    break;
+                    return;
                 default:
                     return;
             }
