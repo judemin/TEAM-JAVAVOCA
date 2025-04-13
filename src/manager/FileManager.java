@@ -23,25 +23,25 @@ public class FileManager {
         // TODO: 5.4 무결성 확인 및 처리 - 1. 항목이 이상하게 들여쓰기 되어있음
 
         // 홈 경로에서 단어 데이터 파일(words.txt, wrong_answers.txt) 존재 여부 확인
-        File file = new File(getHomePath(), fp.getPath());
+        File file = new File(getCurrentPath(), fp.getPath());
         exitIfNotExist(file);
 
         return file;
     }
 
     // 사용자 홈 경로 파악
-    public static String getHomePath(){
-        String homePath = System.getProperty("user.home");
+    public static String getCurrentPath(){
+        String currentPath = System.getProperty("user.dir");
         // 테스트 전에 한번씩 찍어보세요
-        // System.out.println(homePath);
+        // System.out.println(currentPath);
         /*
             /Users/seungwoo - 오잉?
          */
-        if (homePath == null || homePath.trim().isEmpty()) {
+        if (currentPath == null || currentPath.trim().isEmpty()) {
             System.out.print("!!! 오류: 홈 경로를 파악할 수 없습니다! ");
             exitProgram();
         }
-        return homePath;
+        return currentPath;
     }
 
     private static void exitIfNotExist(File file) {
