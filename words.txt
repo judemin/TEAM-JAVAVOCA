@@ -5,12 +5,18 @@
 
 
 
-Sandwich : Two pieces of bread with filling
+Sandwich : sdfdsf
 Universe : All existing matter and space as a whole
 Triangle : tritritri
-p : panpineapplepen
+p : pineapple
 
 bug: shit
 he: aaaaaa
 dd: aaaaaaa
 
+
+apple: apple
+
+ap: sdf
+
+sdfdsf: sdfsfsdfsd
