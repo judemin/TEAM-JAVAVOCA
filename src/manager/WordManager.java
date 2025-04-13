@@ -17,12 +17,16 @@ public class WordManager {
 
     private Scanner scanner;
     private final BaseRepository baseRepository;
+    private final BaseRepository wrongRepository;
     private final BaseIO wordFileIO;
+    private final BaseIO wrongFileIO;
 
-    public WordManager(Scanner scanner, BaseRepository baseRepository, BaseIO wordFileIO) {
+    public WordManager(Scanner scanner, BaseRepository baseRepository, BaseRepository wrongRepository, BaseIO wordFileIO, BaseIO wrongFileIO) {
         this.scanner = scanner;
         this.baseRepository = baseRepository;
+        this.wrongRepository = wrongRepository;
         this.wordFileIO = wordFileIO;
+        this.wrongFileIO = wrongFileIO;
     }
 
     public void run() throws IOException {
@@ -82,11 +86,19 @@ public class WordManager {
 
         System.out.println("정말 삭제하시겠습니까? (.../No) > ");
         if (!scanner.nextLine().trim().equals("No")) {
-            wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord); // 파일 전체 저장
-            if(WrongWordRepository.getInstance().exists(existingWord)){
-                WrongFileIO.getInstance().removeWord(FileManager.getFile(FilePath.WRONG_ANSWERS), existingWord);
-            }
+            // 단어 파일에서 삭제
+            wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord);
             System.out.println("단어가 삭제되었습니다.");
+
+            // 오답 파일에도 존재하면 삭제
+            List<Word> wrongWords = wrongRepository.getWordsList();
+            Optional<Word> wrongWord = wrongWords.stream()
+                    .filter(w -> w.getWord().equalsIgnoreCase(word))
+                    .findFirst();
+
+            if (wrongWord.isPresent()) {
+                wrongFileIO.removeWord(FileManager.getFile(FilePath.WRONG_ANSWERS), wrongWord.get());
+            }
         }
     }
 
@@ -112,11 +124,28 @@ public class WordManager {
         String meaning = promptMeaningWithDuplicateCheck(word);
 
         if (confirmSave(word, meaning)) {
+            Word updatedWord = Word.of(word, meaning);
+
+            // words 파일 업데이트
             records.remove(existingWord);
-            records.add(Word.of(word, meaning));
-            wordFileIO.editWordInFile(FileManager.getFile(FilePath.WORDS),Word.of(word, meaning)); // 파일 전체 저장
+            records.add(updatedWord);
+            wordFileIO.editWordInFile(FileManager.getFile(FilePath.WORDS), updatedWord);
             System.out.println("단어가 수정되었습니다.");
+
+            // wrong_answers 파일에도 같은 단어가 있으면 수정
+            List<Word> wrongWords = wrongRepository.getWordsList();
+
+            Optional<Word> matchedWrongWord = wrongWords.stream()
+                    .filter(w -> w.getWord().equalsIgnoreCase(word))
+                    .findFirst();
+
+            if (matchedWrongWord.isPresent()) {
+                wrongWords.remove(matchedWrongWord.get());
+                wrongWords.add(updatedWord);
+                wrongFileIO.editWordInFile(FileManager.getFile(FilePath.WRONG_ANSWERS), updatedWord);
+            }
         }
+
     }
 
     private String removePromptWord() {

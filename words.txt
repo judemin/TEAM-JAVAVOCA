@@ -1,8 +1,5 @@
-Apple : A round fruit with red or green skin
-Computer : An electronic device for processing data
-Sunlight : The light coming from the sun
+Sunlight : sun i like
 Backpack : A bag carried on the back
-
 
 
 

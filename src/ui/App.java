@@ -30,7 +30,7 @@ public class App {
      * App을 초기화합니다. 데이터 파일을 로드하고 필요한 매니저 객체들을 생성합니다.
      */
     public App() {
-        this.wordManager = new WordManager(new Scanner(System.in), SavedWordRepository.getInstance(), WordFileIO.getInstance());
+        this.wordManager = new WordManager(new Scanner(System.in), SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WordFileIO.getInstance(), WrongFileIO.getInstance());
         this.quizManager = new QuizManager(SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WrongFileIO.getInstance());
         this.searchManager = new SearchManager(SavedWordRepository.getInstance());
         this.scanner = new Scanner(System.in);
