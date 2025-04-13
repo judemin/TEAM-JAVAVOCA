@@ -23,7 +23,7 @@ public abstract class BaseIO {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             writer.newLine(); // 새로운 줄로 이동 (없어도 되지만 가독성 위해)
             writer.write(word.toString());
-        } catch (IOException _) {
+        } catch (IOException e) {
             exitProgram();
         }
 
@@ -58,13 +58,13 @@ public abstract class BaseIO {
 
             }
 
-        } catch (Exception _) {
+        } catch (Exception e) {
             exitProgram();
         }
 
         try {
             Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
-        } catch (IOException _) {
+        } catch (IOException e) {
             exitProgram();
         }
 
@@ -104,13 +104,13 @@ public abstract class BaseIO {
                 }
             }
 
-        } catch (Exception _) {
+        } catch (Exception e) {
             exitProgram();
         }
 
         try {
             Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
-        } catch (IOException _) {
+        } catch (IOException e) {
             exitProgram();
         }
 
