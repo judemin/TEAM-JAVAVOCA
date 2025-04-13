@@ -219,7 +219,7 @@ public class WordManager {
         System.out.println("      ==> 단어: " + word);
         System.out.println("            뜻: " + meaning);
         System.out.print("Javavoca: 정말 저장하시겠습니까? (.../No) > ");
-        String input = scanner.nextLine().trim();
+        String input = scanner.nextLine();
         return !input.equals("No");
     }
 
