@@ -11,7 +11,7 @@ import java.util.regex.*;
 
 public class WordManager {
     private static final Pattern WORD_PATTERN = Pattern.compile("^[a-zA-Z]{1,50}$");
-    private static final Pattern MEANING_PATTERN = Pattern.compile("^[a-zA-Z ]+$");
+    private static final Pattern MEANING_PATTERN = Pattern.compile("^[a-zA-Z ]{1,256}$");
 
     private Scanner scanner;
     private final BaseRepository baseRepository;
