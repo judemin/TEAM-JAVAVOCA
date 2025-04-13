@@ -52,9 +52,20 @@ public class FileManager {
     }
 
 
-    public static void checkFileAuthority(File file){
+    public static void checkFileAuthority(File file) {
+        boolean exit = false;
         // 3. 두 파일에 대한 입출력(R/W) 권한 검사
-        if (!file.canRead() || !file.canWrite()) {
+        if (!file.exists() || !file.isFile() || !file.canRead() || !file.canWrite()) {
+            exit = true;
+
+        }
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+        } catch (Exception e) {
+            exit = true;
+        }
+
+        if (exit) {
             String errorMessage = "!!! 오류: 데이터 파일\n"
                     + file.getAbsolutePath()
                     + "\n에 대한 입출력 권한이 없습니다! ";
