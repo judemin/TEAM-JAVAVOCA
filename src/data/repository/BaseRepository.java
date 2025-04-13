@@ -17,6 +17,10 @@ public abstract class BaseRepository {
         return words;
     }
 
+    public boolean exists(Word word){
+        return word != null && words.contains(word);
+    }
+
     // 더 필요한 메서드 있으면 추가
     public void removeWord(Word word) {
         words.removeIf(entry ->

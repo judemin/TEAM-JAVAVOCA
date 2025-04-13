@@ -29,6 +29,24 @@ public class Word {
         return this.word + ": " + this.meaning;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) { // 동일 객체인지 확인
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Word other = (Word) obj;
+        // word과 meaning를 대소문자 구분 없이 비교.
+        // 만약 field가 null인 경우도 고려하여 비교합니다.
+        boolean wordEquals = (this.word == null) ? (other.word == null)
+                : this.word.equalsIgnoreCase(other.word);
+        boolean meaningEquals = (this.meaning == null) ? (other.meaning == null)
+                : this.meaning.equalsIgnoreCase(other.meaning);
+        return wordEquals && meaningEquals;
+    }
+
     public String getWord() {
         return word;
     }

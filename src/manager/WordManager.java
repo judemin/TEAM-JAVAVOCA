@@ -2,8 +2,10 @@ package manager;
 
 import data.entity.Word;
 import data.repository.BaseRepository;
+import data.repository.WrongWordRepository;
 import enums.FilePath;
 import io.BaseIO;
+import io.WrongFileIO;
 
 import java.io.*;
 import java.util.*;
@@ -81,6 +83,9 @@ public class WordManager {
         System.out.println("정말 삭제하시겠습니까? (.../No) > ");
         if (!scanner.nextLine().trim().equals("No")) {
             wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord); // 파일 전체 저장
+            if(WrongWordRepository.getInstance().exists(existingWord)){
+                WrongFileIO.getInstance().removeWord(FileManager.getFile(FilePath.WRONG_ANSWERS), existingWord);
+            }
             System.out.println("단어가 삭제되었습니다.");
         }
     }

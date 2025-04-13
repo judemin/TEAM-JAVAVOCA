@@ -54,7 +54,7 @@ public class App {
         FileManager.checkFileIntegrity(wrongFile);
 
         FileManager.removeDuplicates(wordFile);
-        FileManager.removeDuplicates(wordFile);
+        FileManager.removeDuplicates(wrongFile);
 
         FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
         FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
