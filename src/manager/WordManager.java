@@ -11,7 +11,7 @@ import java.util.regex.*;
 
 public class WordManager {
     private static final Pattern WORD_PATTERN = Pattern.compile("^[a-zA-Z]{1,50}$");
-    private static final Pattern MEANING_PATTERN = Pattern.compile("^[a-zA-Z ]{1,256}$");
+    private static final Pattern MEANING_PATTERN = Pattern.compile("^[a-zA-Z ]{1,255}$");
 
     private Scanner scanner;
     private final BaseRepository baseRepository;
@@ -216,10 +216,10 @@ public class WordManager {
 
     private boolean confirmSave(String word, String meaning) {
         System.out.println("... 현재까지 입력한 단어입니다:");
-        System.out.println("==> 단어: " + word);
-        System.out.println("뜻: " + meaning);
+        System.out.println("      ==> 단어: " + word);
+        System.out.println("            뜻: " + meaning);
         System.out.print("Javavoca: 정말 저장하시겠습니까? (.../No) > ");
-        String input = scanner.nextLine().trim();
+        String input = scanner.nextLine();
         return !input.equals("No");
     }
 
