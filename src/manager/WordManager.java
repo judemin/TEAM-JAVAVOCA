@@ -78,12 +78,16 @@ public class WordManager {
                 .orElse(null);
 
         if (existingWord == null) {
-            System.out.println("기존 단어가 존재하지 않습니다.");
+            System.out.println("삭제 대상을 특정할 수 없습니다");
             return;
         }
 
-        System.out.println("정말 삭제하시겠습니까? (.../No) > ");
-        if (!scanner.nextLine().trim().equals("No")) {
+        // 삭제할 단어 출력
+        System.out.println("==> 단어: " + existingWord.getWord());
+        System.out.println("    뜻: " + existingWord.getMeaning());
+
+        System.out.print("정말 삭제하시겠습니까? (Y/그 외) > ");
+        if (scanner.nextLine().trim().equalsIgnoreCase("Y")) {
             // 단어 파일에서 삭제
             wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord);
             System.out.println("단어가 삭제되었습니다.");
