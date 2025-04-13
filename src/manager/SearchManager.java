@@ -54,7 +54,7 @@ public class SearchManager {
      * 입력값 유효성 검사
      */
     private boolean isValidEnglishWord(String input) {
-        return input.equals(input.trim()) && input.matches("^[a-zA-Z]+$");
+        return input.equals(input.trim()) && input.matches("^[a-zA-Z]{1,50}$");
     }
 
     /**
