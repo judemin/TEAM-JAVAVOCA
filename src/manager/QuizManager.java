@@ -125,7 +125,7 @@ public class QuizManager {
                 String rawInput = br.readLine();
                 String userInput = rawInput.trim();
 
-                if (!userInput.matches("^[a-zA-Z]+$") || !rawInput.equals(userInput)) {
+                if (!userInput.matches("^[a-zA-Z]{1,50}$") || !rawInput.equals(userInput)) {
                     System.out.println(".!! 오류: 올바른 단어 형식을 입력해주세요. (공백 미 포함 영어만 입력가능)");
                     continue;
                 }
