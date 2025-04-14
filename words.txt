@@ -8,7 +8,6 @@
 Sandwich : sdfdsf
 Universe : All existing matter and space as a whole
 Triangle : tritritri
-p : pineapple
 
 bug: shit
 he: aaaaaa

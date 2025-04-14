@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class FileManager {
 
@@ -232,4 +233,68 @@ public class FileManager {
         System.exit(1);
     }
 
+    public static void deleteWrongWordsNotInWordFile(File wordFile, File wrongFile) {
+        HashSet<Word> wordHashSet = new HashSet<>();
+        ArrayList<String> filteredLines = new ArrayList<>();
+        ArrayList<String> removedLines = new ArrayList<>();
+
+        // 파일 데이터를 WordFileIO, WrongFileIO 객체에 넣기
+        try (BufferedReader br = new BufferedReader(new FileReader(wordFile))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                if(line.trim().isEmpty()){
+                    continue;
+                }
+                String[] parts = line.split(":", 2);
+                String word = parts[0].trim();
+                String explanation = parts[1].trim();
+                wordHashSet.add(Word.of(word,explanation));
+            }
+
+        } catch (Exception e) {
+            exitProgram();
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(wrongFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                if(line.trim().isEmpty()){
+                    filteredLines.add(line);
+                    continue;
+                }
+
+                String[] parts = line.split(":", 2);
+                String word = parts[0].trim();
+                String explanation = parts[1].trim();
+
+                if (wordHashSet.contains(Word.of(word,explanation))) {
+                    // 단어가 이미 존재하면 현재 라인을 제거(추가하지 않음)
+                    // 중복 단어 리스트에 단어 추가
+                    filteredLines.add(line);
+                    continue;
+                } else {
+                    removedLines.add(line);
+                    continue;
+                }
+
+            }
+
+        } catch (Exception e) {
+            exitProgram();
+        }
+
+        try {
+            Files.write(wrongFile.toPath(), filteredLines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            exitProgram();
+        }
+
+        // 테스트용(기획서에 없음)
+        removedLines.forEach(w ->
+                System.out.println("제거한 wrong_answers.txt에만 있는 Word: " + w)
+        );
+
+
+    }
 }

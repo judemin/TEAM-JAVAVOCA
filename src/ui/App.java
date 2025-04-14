@@ -56,8 +56,11 @@ public class App {
         FileManager.removeDuplicates(wordFile);
         FileManager.removeDuplicates(wrongFile);
 
+        FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
+
         FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
         FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
+
 
         while (true) {
             // TODO: 에러 메세지 출력을 할지 말지 (수정사항)

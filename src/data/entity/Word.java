@@ -47,6 +47,18 @@ public class Word {
         return wordEquals && meaningEquals;
     }
 
+    @Override
+    public int hashCode() {
+        int result = 1;
+
+        // word 대소문자 구분하지 않으므로 toLowerCase() (또는 toUpperCase()) 사용
+        result = 31 * result + (this.word == null ? 0 : this.word.toLowerCase().hashCode());
+        result = 31 * result + (this.meaning == null ? 0 : this.meaning.toLowerCase().hashCode());
+
+        return result;
+    }
+
+
     public String getWord() {
         return word;
     }

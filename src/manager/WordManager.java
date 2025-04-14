@@ -87,7 +87,7 @@ public class WordManager {
         System.out.println("    뜻: " + existingWord.getMeaning());
 
         System.out.print("정말 삭제하시겠습니까? (Y/그 외) > ");
-        if (scanner.nextLine().trim().equalsIgnoreCase("Y")) {
+        if (scanner.nextLine().equals("Y")) {
             // 단어 파일에서 삭제
             wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord);
             System.out.println("단어가 삭제되었습니다.");
