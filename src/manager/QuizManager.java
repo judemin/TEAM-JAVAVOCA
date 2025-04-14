@@ -51,6 +51,7 @@ public class QuizManager {
                 System.out.println("1(일반 모드) / 2(오답 퀴즈 모드)");
                 System.out.print("번호를 선택하세요: ");
                 String input = br.readLine();
+                /*
                 String[] tokens = input.trim().split("\\s+");
 
                 // 인자가 2개 이상일 경우
@@ -58,8 +59,9 @@ public class QuizManager {
                     System.out.println(".!! 오류: 이 명령은 인자를 받지 않습니다!\n");
                     continue;
                 }
+                */
 
-                switch (tokens[0]) {
+                switch (/*tokens[0]*/ input) {
                     case "1":
                         startQuiz(false);
                         return;
