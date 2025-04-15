@@ -69,7 +69,7 @@ public class QuizManager {
                         startQuiz(true);
                         return;
                     default:
-                        System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+                        System.out.println(".!! 오류: 이 명령은 인자를 받지 않습니다!");
                 }
             }
         } catch (IOException e) {
