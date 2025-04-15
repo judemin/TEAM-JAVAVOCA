@@ -68,6 +68,10 @@ public class App {
             // 공백류(들)만 입력하거나, 입력 중 첫번째 단어가 메뉴 항목 번호가 아닐 경우,
             // 틀린 입력으로 간주하고 (“잘못된 입력입니다.”같은 진부한 안내 없이, 조용히)
             // 표1에 준하는 표준 메뉴 항목 번호 및 인자 안내 화면을 출력하고 주 프롬프트로 되돌아갑니다
+
+            FileManager.removeDuplicates(wordFile);
+            FileManager.removeDuplicates(wrongFile);
+
             String input = displayMainMenu();
             if (!input.isEmpty()) {
                 String[] tokens = input.split("\\s+");
