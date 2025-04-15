@@ -32,8 +32,9 @@ public class FileManager {
 
     // 사용자 홈 경로 파악
     public static String getCurrentPath(){
+        String currentPath = "";
         try {
-            String currentPath = System.getProperty("user.home");
+            currentPath = System.getProperty("user.home");
             if (currentPath == null || currentPath.trim().isEmpty()) {
                 System.out.print("!!! 오류: 홈 경로를 파악할 수 없습니다! ");
                 exitProgram();
