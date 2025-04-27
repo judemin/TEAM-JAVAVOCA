@@ -41,18 +41,17 @@ public class App {
      */
     public void run() throws IOException {
 
-        // 홈경로, 파일 존재, 입출력 권한 확인
-        // 분리
+        // 파일 무결성 확인, 파일 데이터 가져오기
         File wordFile = FileManager.getFile(FilePath.WORDS);
         File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
 
         FileManager.checkFileAuthority(wordFile);
         FileManager.checkFileAuthority(wrongFile);
 
-        // 파일 무결성 확인, 파일 데이터 가져오기
         FileManager.checkFileIntegrity(wordFile);
         FileManager.checkFileIntegrity(wrongFile);
 
+        // 중복 데이터 레코드 검사
         FileManager.removeDuplicates(wordFile);
         FileManager.removeDuplicates(wrongFile);
 
