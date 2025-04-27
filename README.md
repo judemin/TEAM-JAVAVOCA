@@ -29,7 +29,7 @@
 
 1. **컴파일**:
 ```bash
-javac -encoding UTF-8 -d bin src/**/*.java
+javac -encoding UTF-8 -d bin $(find src -name "*.java")
 ```
 
 2. **JAR 생성**:
