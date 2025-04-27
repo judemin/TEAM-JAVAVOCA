@@ -90,7 +90,11 @@ public class QuizManager {
                 : savedWordRepository.getWordsList();
 
         int totalSize = originalList.size();
-        System.out.println("→ 저장된 단어 수: " + totalSize + "개");
+        if (useWrongMode){
+            System.out.println("→ 총 틀린 단어 수: " + totalSize + "개");
+        }else {
+            System.out.println("→ 저장된 단어 수: " + totalSize + "개");
+        }
 
         if (totalSize == 0) {
             System.out.println("맞은 개수: 0개");
