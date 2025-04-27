@@ -123,7 +123,7 @@ public class WordManager {
             return;
         }
 
-        String meaning = promptMeaningWithDuplicateCheck(word);
+        String meaning = promptMeaningWithDuplicateCheckUpdateWord(word);
 
         if (confirmSave(word, meaning)) {
             Word updatedWord = Word.of(word, meaning);
@@ -207,6 +207,31 @@ public class WordManager {
                 if (w.getMeaning().equals(meaning)) {
                     duplicate = true;
                     System.out.println("기존 뜻과 같은 뜻이 존재합니다.");
+                    break;
+                }
+            }
+            if (!duplicate) return meaning;
+        }
+    }
+
+    private String promptMeaningWithDuplicateCheckUpdateWord(String word) {
+        List<Word> wordsList = baseRepository.getWordsList();
+
+        while (true) {
+            System.out.print("뜻: ");
+            String rawInput = scanner.nextLine();
+            String meaning = rawInput.trim();
+
+            if (!MEANING_PATTERN.matcher(meaning).matches() || !rawInput.equals(rawInput.trim())) {
+                System.out.println(".!! 오류: 올바른 뜻 형식을 입력해주세요. (공백 포함 영어만 입력가능)");
+                continue;
+            }
+
+            boolean duplicate = false;
+            for (Word w : wordsList) {
+                if (w.getMeaning().equals(meaning)) {
+                    duplicate = true;
+                    System.out.println("기존 뜻풀이가 존재합니다.");
                     break;
                 }
             }
