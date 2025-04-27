@@ -62,9 +62,6 @@ public class App {
 
 
         while (true) {
-            FileManager.removeDuplicates(wordFile);
-            FileManager.removeDuplicates(wrongFile);
-
             String input = displayMainMenu();
             if (!input.isEmpty()) {
                 String[] tokens = input.split("\\s+");
