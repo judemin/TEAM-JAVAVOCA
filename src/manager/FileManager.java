@@ -21,8 +21,6 @@ public class FileManager {
      */
 
     public static File getFile(FilePath fp) {
-        // TODO: 5.4 무결성 확인 및 처리 - 1. 항목이 이상하게 들여쓰기 되어있음
-
         // 홈 경로에서 단어 데이터 파일(words.txt, wrong_answers.txt) 존재 여부 확인
         File file = new File(getCurrentPath(), fp.getPath());
         exitIfNotExist(file);
