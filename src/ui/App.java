@@ -31,9 +31,9 @@ public class App {
 
     public App() {
         this.scanner = new Scanner(System.in);
-        this.wordManager = new WordManager(scanner, SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WordFileIO.getInstance(), WrongFileIO.getInstance());
         this.quizManager = new QuizManager(SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WrongFileIO.getInstance());
-        this.searchManager = new SearchManager(SavedWordRepository.getInstance());
+        this.wordManager = new WordManager(scanner, SavedWordRepository.getInstance(), WrongWordRepository.getInstance(), WordFileIO.getInstance(), WrongFileIO.getInstance());
+        this.searchManager = new SearchManager(SavedWordRepository.getInstance(), WrongWordRepository.getInstance());
     }
 
     public void run() throws IOException {
@@ -57,6 +57,7 @@ public class App {
             }
 
             if (loginSuccess) {
+                FileManager.createUserWrongAnswerFileIfAbsent(loggedInUser.getId());
                 quizManager.setCurrentUserId(loggedInUser.getId());
                 runMainMenu();
             }
@@ -135,6 +136,8 @@ public class App {
 
         System.out.println("로그인이 성공적으로 완료되었습니다!");
         this.loggedInUser = new User(inputId, inputPw);
+        FileManager.createUserWrongAnswerFileIfAbsent(inputId);
+        quizManager.setCurrentUserId(inputId);
 
         try {
             initFileSystem();
@@ -171,6 +174,8 @@ public class App {
 
             saveUserToFile(inputId, inputPw);
             this.loggedInUser = new User(inputId, inputPw);
+            FileManager.createUserWrongAnswerFileIfAbsent(inputId);
+            quizManager.setCurrentUserId(inputId);
             System.out.println("회원가입이 완료되었습니다.");
             return true;
         }

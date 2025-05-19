@@ -32,4 +32,5 @@ public class WrongFileIO extends BaseIO {
         List<Word> wordList = WrongWordRepository.getInstance().getWordsList();
         removeWordIfExists(file, word, wordList);
     }
+
 }

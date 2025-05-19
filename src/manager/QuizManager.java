@@ -54,7 +54,9 @@ public class QuizManager {
     }
 
     private File getUserWrongFile() {
-        return new File(currentUserId + "_wrong_answers.txt");
+        // 사용자 홈 디렉토리에 저장
+        String userHome = System.getProperty("user.home");
+        return new File(userHome, currentUserId + "_wrong_answers.txt");
     }
 
     public boolean startQuiz(boolean useWrongMode) throws IOException {
@@ -62,12 +64,19 @@ public class QuizManager {
         List<Word> originalList = new ArrayList<>();
         Set<String> seenWords = new HashSet<>();
 
-        if (useWrongMode) {
-            File userWrongFile = getUserWrongFile();
-            if (userWrongFile.exists()) {
-                wrongWordRepository.getWordsList().clear();
-                FileManager.loadFiles(userWrongFile, wrongWordRepository);
+        File userWrongFile = getUserWrongFile();
+
+        // 파일 없으면 자동 생성
+        if (!userWrongFile.exists()) {
+            boolean created = userWrongFile.createNewFile();
+            if (created) {
+                System.out.println("> 사용자 오답 파일 생성됨: " + userWrongFile.getAbsolutePath());
             }
+        }
+
+        if (useWrongMode) {
+            wrongWordRepository.getWordsList().clear();
+            FileManager.loadFiles(userWrongFile, wrongWordRepository);
         }
 
         List<Word> sourceList = useWrongMode
@@ -121,12 +130,15 @@ public class QuizManager {
         } else {
             Collections.shuffle(originalList);
             quizList = originalList.subList(0, Math.min(10, originalList.size()));
-            System.out.println("→ 모든 단어를 오답퀴즈로 출제합니다.");
+            if (useWrongMode) {
+                System.out.println("→ 오답 단어가 10개 미만이므로 모두 출제합니다.");
+            } else {
+                System.out.println("→ 모든 단어를 퀴즈로 출제합니다.");
+            }
         }
 
         int correctCount = 0;
         int wrongCount = 0;
-        File userWrongFile = getUserWrongFile();
 
         for (int i = 0; i < quizList.size(); i++) {
             Word question = quizList.get(i);
@@ -167,22 +179,21 @@ public class QuizManager {
                     } else if (attempts == 2) {
                         System.out.println("틀렸습니다! 시도 횟수: 2, 마지막글자: " + answer.charAt(answer.length() - 1));
                     } else {
-                        System.out.print("시도 횟수가 초과되었습니다. ");
-
-                        boolean alreadyExists = wrongWordRepository.exists(question);
-
-                        if (!alreadyExists) {
-                            wrongFileIO.addWord(userWrongFile, question);
-                            System.out.println("오답 데이터 파일에 추가합니다. 다음 문제로 넘어갑니다.");
-                        } else {
-                            int currentCount = wrongWordRepository.count(question.getWord());
-                            System.out.println("현재 오답 수: " + currentCount + ". 다음 문제로 넘어갑니다.");
-                        }
-
-                        wrongCount++;
-                        break;
+                        System.out.println("시도 횟수가 초과되었습니다.");
                     }
                 }
+            }
+
+            if (!isCorrect) {
+                boolean alreadyExists = wrongWordRepository.exists(question);
+                if (!alreadyExists) {
+                    wrongFileIO.addWord(userWrongFile, question);
+                    System.out.println("오답 데이터 파일에 추가합니다.");
+                } else {
+                    int currentCount = wrongWordRepository.count(question.getWord());
+                    System.out.println("현재 오답 수: " + currentCount);
+                }
+                wrongCount++;
             }
 
             System.out.println();
