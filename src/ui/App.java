@@ -49,17 +49,11 @@ public class App {
 
             boolean loginSuccess = false;
 
-            switch (command) {
-                case "1":
-                    loginSuccess = loginFlow();
-                    break;
-                case "2":
-                    loginSuccess = signupFlow();
-                    break;
-                default:
-                    System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
-                    continue;
-            }
+            loginSuccess = switch (command) {
+                case "1" -> loginFlow();
+                case "2" -> signupFlow();
+                default -> false;
+            };
 
             if (loginSuccess) {
                 FileManager.createUserWrongAnswerFileIfAbsent(loggedInUser.getId());
@@ -199,7 +193,7 @@ public class App {
         try (Scanner fileScanner = new Scanner(userFile)) {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
-                String[] tokens = line.split(",");
+                String[] tokens = line.split(":");
                 if (tokens.length >= 1 && tokens[0].equals(userId)) {
                     return true;
                 }
@@ -213,12 +207,13 @@ public class App {
 
     private boolean authenticateUser(String userId, String password) {
         File userFile = new File(getCurrentPath(),"users.txt");
-        if (!userFile.exists()) return false;
+        //파일이 무조건 존재해야 이 상태로 오니까 필요없음
+        //if (!userFile.exists()) return false;
 
         try (Scanner fileScanner = new Scanner(userFile)) {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
-                String[] tokens = line.split(",");
+                String[] tokens = line.split(":");
                 if (tokens.length == 2 && tokens[0].equals(userId) && tokens[1].equals(password)) {
                     return true;
                 }
@@ -234,7 +229,7 @@ public class App {
         File userFile = new File(getCurrentPath(),"users.txt");
 
         try (FileWriter writer = new FileWriter(userFile, true)) {
-            writer.write(userId + "," + password + "\n");
+            writer.write(userId + ":" + password + "\n");
         } catch (IOException e) {
             System.out.println("사용자 정보를 저장하는 중 오류가 발생했습니다.");
         }
