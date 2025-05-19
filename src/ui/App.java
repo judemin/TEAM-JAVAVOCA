@@ -56,7 +56,7 @@ public class App {
             };
 
             if (loginSuccess) {
-                FileManager.createUserWrongAnswerFileIfAbsent(loggedInUser.getId());
+                initWrongAnswer();
                 quizManager.setCurrentUserId(loggedInUser.getId());
                 runMainMenu();
             }
@@ -137,23 +137,19 @@ public class App {
 
         System.out.println("로그인이 성공적으로 완료되었습니다!");
         this.loggedInUser = new User(inputId, inputPw);
-        FileManager.createUserWrongAnswerFileIfAbsent(inputId);
         quizManager.setCurrentUserId(inputId);
-
-        try {
-            initWrongAnswer();
-        } catch (IOException e) {
-            System.out.println("파일 로딩 중 오류가 발생했습니다. 프로그램을 종료합니다.");
-            System.exit(1);
-        }
 
         return true;
     }
 
     // TODO 유저에 알맞는 wrong_answer로 해주어야 함.
-    private void initWrongAnswer() throws IOException{
+    private void initWrongAnswer() throws IOException {
+        File wrongFile = new File(loggedInUser.getId() + "_wrong_answers.txt");
+        if (!wrongFile.exists()) {
+            wrongFile.createNewFile();
+            return;
+        }
         File wordFile = FileManager.getFile(FilePath.WORDS);
-        File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
 
         FileManager.checkFileAuthority(wrongFile);
         FileManager.checkFileIntegrity(wrongFile);
@@ -187,15 +183,8 @@ public class App {
 
             saveUserToFile(inputId, inputPw);
             this.loggedInUser = new User(inputId, inputPw);
-            FileManager.createUserWrongAnswerFileIfAbsent(inputId);
             quizManager.setCurrentUserId(inputId);
             System.out.println("회원가입이 완료되었습니다.");
-            try {
-                initWrongAnswer();
-            } catch (IOException e) {
-                System.out.println("파일 로딩 중 오류가 발생했습니다. 프로그램을 종료합니다.");
-                System.exit(1);
-            }
             return true;
         }
     }

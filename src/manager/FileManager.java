@@ -145,17 +145,6 @@ public class FileManager {
         }
     }
 
-    public static void createUserWrongAnswerFileIfAbsent(String userId) {
-        File file = new File(userId + "_wrong_answers.txt");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                System.out.println("오답 파일 생성 중 오류 발생: " + e.getMessage());
-            }
-        }
-    }
-
     private static void exitProgram() {
         System.out.println("프로그램을 종료합니다.");
         System.exit(1);
