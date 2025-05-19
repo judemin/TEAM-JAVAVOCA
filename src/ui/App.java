@@ -23,7 +23,10 @@ import static manager.FileManager.getCurrentPath;
  * 프로그램의 메인 흐름을 제어하고 사용자 메뉴를 처리합니다.
  */
 public class App {
-
+/**
+ * p10 users.txt는 “사용자 정보”가 기록된 형식의 텍스트 파일이며, 프로그램 실행 시 반드시 존재해야 합니다.
+ *
+ */
     private WordManager wordManager;
     private QuizManager quizManager;
     private SearchManager searchManager;
@@ -69,11 +72,17 @@ public class App {
     private void initFileSystem() throws IOException {
         File wordFile = FileManager.getFile(FilePath.WORDS);
         File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
+        File userFile = FileManager.getFile(FilePath.USER_INFO);
 
         FileManager.checkFileAuthority(wordFile);
         FileManager.checkFileAuthority(wrongFile);
+        FileManager.checkFileAuthority(userFile);
+
         FileManager.checkFileIntegrity(wordFile);
         FileManager.checkFileIntegrity(wrongFile);
+        // TODO userFile 무결성 처리
+
+        // "공용" 단어 파일과 "유저별" 오답 파일, 이 두 가지에 대한 처리 부분.
         FileManager.removeDuplicates(wordFile);
         FileManager.removeDuplicates(wrongFile);
         FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
@@ -184,7 +193,7 @@ public class App {
     }
 
     private boolean isUserIdExists(String userId) {
-        File userFile = new File("users.txt");
+        File userFile = new File(getCurrentPath(),"users.txt");
         if (!userFile.exists()) return false;
 
         try (Scanner fileScanner = new Scanner(userFile)) {

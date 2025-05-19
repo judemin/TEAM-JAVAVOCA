@@ -1,7 +1,7 @@
 package enums;
 
 public enum FilePath {
-    WORDS("words.txt"), WRONG_ANSWERS("wrong_answers.txt");
+    WORDS("words.txt"), WRONG_ANSWERS("wrong_answers.txt"), USER_INFO("users.txt");
 
     final String path;
 
