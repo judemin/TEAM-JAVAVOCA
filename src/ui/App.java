@@ -65,29 +65,24 @@ public class App {
 
     private void initFileSystem() throws IOException {
         File wordFile = FileManager.getFile(FilePath.WORDS);
-        File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
         File userFile = FileManager.getFile(FilePath.USER_INFO);
 
         FileManager.checkFileAuthority(wordFile);
-        FileManager.checkFileAuthority(wrongFile);
         FileManager.checkFileAuthority(userFile);
 
         FileManager.checkFileIntegrity(wordFile);
-        FileManager.checkFileIntegrity(wrongFile);
         // TODO userFile 무결성 처리
 
         // "공용" 단어 파일과 "유저별" 오답 파일, 이 두 가지에 대한 처리 부분.
         FileManager.removeDuplicates(wordFile);
-        FileManager.removeDuplicates(wrongFile);
-        FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
         FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
-        FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
+
     }
 
     private String displayStartMenu() {
         while (true) {
             System.out.print("Javavoca > ");
-            // p36: "입력 중 첫번째 단어가"
+            // trim 붙인 이유: p36: "입력 중 첫번째 단어가"
             String input = scanner.nextLine().trim();
 
             if (input.equals("1") || input.equals("2")) {
@@ -146,13 +141,25 @@ public class App {
         quizManager.setCurrentUserId(inputId);
 
         try {
-            initFileSystem();
+            initWrongAnswer();
         } catch (IOException e) {
             System.out.println("파일 로딩 중 오류가 발생했습니다. 프로그램을 종료합니다.");
             System.exit(1);
         }
 
         return true;
+    }
+
+    // TODO 유저에 알맞는 wrong_answer로 해주어야 함.
+    private void initWrongAnswer() throws IOException{
+        File wordFile = FileManager.getFile(FilePath.WORDS);
+        File wrongFile = FileManager.getFile(FilePath.WRONG_ANSWERS);
+
+        FileManager.checkFileAuthority(wrongFile);
+        FileManager.checkFileIntegrity(wrongFile);
+        FileManager.removeDuplicates(wrongFile);
+        FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
+        FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
     }
 
     private boolean signupFlow() {
@@ -183,6 +190,12 @@ public class App {
             FileManager.createUserWrongAnswerFileIfAbsent(inputId);
             quizManager.setCurrentUserId(inputId);
             System.out.println("회원가입이 완료되었습니다.");
+            try {
+                initWrongAnswer();
+            } catch (IOException e) {
+                System.out.println("파일 로딩 중 오류가 발생했습니다. 프로그램을 종료합니다.");
+                System.exit(1);
+            }
             return true;
         }
     }
@@ -265,7 +278,7 @@ public class App {
         System.out.println("3: 단어 레코드 관리");
         System.out.println("4: 프로그램 종료");
         System.out.print("Javavoca > ");
-        // "p43: 입력 중 첫 번째 단어가"
+        // trim 붙인 이유: "p43: 입력 중 첫 번째 단어가"
         return scanner.nextLine().trim();
     }
 
