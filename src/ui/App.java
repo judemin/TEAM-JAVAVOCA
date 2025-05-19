@@ -42,8 +42,7 @@ public class App {
     }
 
     public void run() throws IOException {
-        initFileSystem();
-
+        initUserFile();
         while (true) {
             String command = displayStartMenu();
 
@@ -56,27 +55,40 @@ public class App {
             };
 
             if (loginSuccess) {
-                initWrongAnswer();
+                initWordAndWrongFiles();
                 quizManager.setCurrentUserId(loggedInUser.getId());
                 runMainMenu();
             }
         }
     }
 
-    private void initFileSystem() throws IOException {
-        File wordFile = FileManager.getFile(FilePath.WORDS);
+    private void initUserFile() throws IOException {
         File userFile = FileManager.getFile(FilePath.USER_INFO);
-
-        FileManager.checkFileAuthority(wordFile);
         FileManager.checkFileAuthority(userFile);
+        FileManager.checkFileIntegrity(userFile,FilePath.USER_INFO);
+    }
 
-        FileManager.checkFileIntegrity(wordFile);
-        // TODO userFile 무결성 처리
+    // TODO 유저에 알맞는 wrong_answer로 해주어야 함.
+    private void initWordAndWrongFiles() throws IOException {
+        File wordFile = FileManager.getFile(FilePath.WORDS);
+        FileManager.checkFileAuthority(wordFile);
+        FileManager.checkFileIntegrity(wordFile,FilePath.WORDS);
 
-        // "공용" 단어 파일과 "유저별" 오답 파일, 이 두 가지에 대한 처리 부분.
         FileManager.removeDuplicates(wordFile);
         FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
 
+        File wrongFile = new File(loggedInUser.getId() + FilePath.WRONG_ANSWERS);
+        if (!wrongFile.exists()) {
+            wrongFile.createNewFile();
+            return;
+        }
+
+        // wrongFile이 이미 존재하고 있어야 의미있는 작업들
+        FileManager.checkFileAuthority(wrongFile);
+        FileManager.checkFileIntegrity(wrongFile,FilePath.WRONG_ANSWERS);
+        FileManager.removeDuplicates(wrongFile);
+        FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
+        FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
     }
 
     private String displayStartMenu() {
@@ -140,22 +152,6 @@ public class App {
         quizManager.setCurrentUserId(inputId);
 
         return true;
-    }
-
-    // TODO 유저에 알맞는 wrong_answer로 해주어야 함.
-    private void initWrongAnswer() throws IOException {
-        File wrongFile = new File(loggedInUser.getId() + "_wrong_answers.txt");
-        if (!wrongFile.exists()) {
-            wrongFile.createNewFile();
-            return;
-        }
-        File wordFile = FileManager.getFile(FilePath.WORDS);
-
-        FileManager.checkFileAuthority(wrongFile);
-        FileManager.checkFileIntegrity(wrongFile);
-        FileManager.removeDuplicates(wrongFile);
-        FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
-        FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
     }
 
     private boolean signupFlow() {
