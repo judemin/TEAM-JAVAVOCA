@@ -112,8 +112,8 @@ public class QuizManager {
             originalList.sort((w1, w2) -> {
                 int c1 = wrongWordRepository.count(w1.getWord());
                 int c2 = wrongWordRepository.count(w2.getWord());
-                double e1 = (double) c1 * D / (W + c1 * D);
-                double e2 = (double) c2 * D / (W + c2 * D);
+                double e1 = (double) c1 * D / (W + (double)c1 * D);
+                double e2 = (double) c2 * D / (W + (double)c2 * D);
                 return Double.compare(e2, e1);
             });
 
