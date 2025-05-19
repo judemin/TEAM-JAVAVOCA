@@ -103,10 +103,10 @@ public class App {
             System.out.print("로그인을 하기 위해 아이디를 입력해주세요.\nJavavoca > ");
             inputId = scanner.nextLine().trim();
 
-            if (inputId.isBlank()) {
-                System.out.println(".!!오류: 공백만 입력할 수 없습니다!");
-                continue;
-            }
+//            if (inputId.isBlank()) {
+//                System.out.println(".!!오류: 공백만 입력할 수 없습니다!");
+//                continue;
+//            }
 
             if (!UserValidator.isValid(inputId)) {
                 System.out.println(".!!오류: 올바른 형식의 아이디가 아닙니다!");
@@ -121,10 +121,10 @@ public class App {
             System.out.print("비밀번호를 입력해주세요.\nJavavoca > ");
             inputPw = scanner.nextLine().trim();
 
-            if (inputPw.isBlank()) {
-                System.out.println(".!!오류: 공백만 입력할 수 없습니다!");
-                continue;
-            }
+//            if (inputPw.isBlank()) {
+//                System.out.println(".!!오류: 공백만 입력할 수 없습니다!");
+//                continue;
+//            }
 
             if (!UserValidator.isValid(inputPw)) {
                 System.out.println(".!!오류: 올바른 형식의 비밀번호가 아닙니다!");
