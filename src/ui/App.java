@@ -87,6 +87,7 @@ public class App {
     private String displayStartMenu() {
         while (true) {
             System.out.print("Javavoca > ");
+            // p36: "입력 중 첫번째 단어가"
             String input = scanner.nextLine().trim();
 
             if (input.equals("1") || input.equals("2")) {
@@ -101,7 +102,7 @@ public class App {
         String inputId;
         while (true) {
             System.out.print("로그인을 하기 위해 아이디를 입력해주세요.\nJavavoca > ");
-            inputId = scanner.nextLine().trim();
+            inputId = scanner.nextLine();/*.trim();*/
 
 //            if (inputId.isBlank()) {
 //                System.out.println(".!!오류: 공백만 입력할 수 없습니다!");
@@ -119,7 +120,7 @@ public class App {
         String inputPw;
         while (true) {
             System.out.print("비밀번호를 입력해주세요.\nJavavoca > ");
-            inputPw = scanner.nextLine().trim();
+            inputPw = scanner.nextLine(); /*.trim();*/
 
 //            if (inputPw.isBlank()) {
 //                System.out.println(".!!오류: 공백만 입력할 수 없습니다!");
@@ -157,7 +158,7 @@ public class App {
     private boolean signupFlow() {
         while (true) {
             System.out.print("회원가입을 위한 아이디를 입력해주세요.\nJavavoca > ");
-            String inputId = scanner.nextLine().trim();
+            String inputId = scanner.nextLine(); /*.trim();*/
 
             if (!UserValidator.isValid(inputId)) {
                 System.out.println("아이디 형식이 올바르지 않습니다. 다시 입력해주세요.");
@@ -170,7 +171,7 @@ public class App {
             }
 
             System.out.print("비밀번호를 입력해주세요.\nJavavoca > ");
-            String inputPw = scanner.nextLine().trim();
+            String inputPw = scanner.nextLine(); /*.trim();*/
 
             if (!UserValidator.isValid(inputPw)) {
                 System.out.println("비밀번호 형식이 올바르지 않습니다. 다시 입력해주세요.");
@@ -264,6 +265,7 @@ public class App {
         System.out.println("3: 단어 레코드 관리");
         System.out.println("4: 프로그램 종료");
         System.out.print("Javavoca > ");
+        // "p43: 입력 중 첫 번째 단어가"
         return scanner.nextLine().trim();
     }
 
