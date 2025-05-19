@@ -223,7 +223,7 @@ public class FileManager {
         }
     }
 
-    public static void removeDuplicates(File file) {
+    public static void removeWordEntryDuplicates(File file) {
         HashMap<String, String> recordMap = new HashMap<>();
         ArrayList<String> duplicatedList = new ArrayList<>();
         ArrayList<String> filteredLines = new ArrayList<>();
@@ -235,15 +235,13 @@ public class FileManager {
                     filteredLines.add(line);
                     continue;
                 }
-                String[] parts = line.split(":", 2);
+                String[] parts = line.split(":", 3);
                 String word = parts[0].trim();
                 String explanation = parts[1].trim();
                 if (recordMap.containsKey(word)) {
                     duplicatedList.add("단어 " + word);
-                    continue;
                 } else if (recordMap.containsValue(explanation)) {
                     duplicatedList.add("뜻풀이 " + explanation);
-                    continue;
                 } else {
                     recordMap.put(word, explanation);
                     filteredLines.add(line);
@@ -256,6 +254,43 @@ public class FileManager {
         try {
             Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
         } catch (IOException e) {
+            exitProgram();
+        }
+
+        duplicatedList.forEach(w ->
+                System.out.println("성공적으로 중복 데이터 레코드를 제거했습니다. 사유: 중복인 " + w)
+        );
+    }
+
+    public static void removeUserEntryDuplicates(File file) {
+        HashSet<String> recordSet = new HashSet<>();
+        ArrayList<String> duplicatedList = new ArrayList<>();
+        ArrayList<String> filteredLines = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if(line.trim().isEmpty()){
+                    filteredLines.add(line);
+                    continue;
+                }
+                String[] parts = line.split(":", 3);
+                String Id = parts[0].trim();
+                if (recordSet.contains(Id)) {
+                    duplicatedList.add("아이디 " + Id);
+                } else {
+                    recordSet.add(Id);
+                    filteredLines.add(line);
+                }
+            }
+        } catch (Exception e) {
+            exitProgram();
+        }
+
+        try {
+            Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            System.out.print("데이터 파일에 결함이 존재하므로 프로그램 작동을 정지합니다.");
             exitProgram();
         }
 

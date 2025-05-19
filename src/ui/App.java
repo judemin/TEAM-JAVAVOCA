@@ -66,6 +66,7 @@ public class App {
         File userFile = FileManager.getFile(FilePath.USER_INFO);
         FileManager.checkFileAuthority(userFile);
         FileManager.checkFileIntegrity(userFile,FilePath.USER_INFO);
+        FileManager.removeUserEntryDuplicates(userFile);
     }
 
     // TODO 유저에 알맞는 wrong_answer로 해주어야 함.
@@ -74,7 +75,7 @@ public class App {
         FileManager.checkFileAuthority(wordFile);
         FileManager.checkFileIntegrity(wordFile,FilePath.WORDS);
 
-        FileManager.removeDuplicates(wordFile);
+        FileManager.removeWordEntryDuplicates(wordFile);
         FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
 
         File wrongFile = new File(loggedInUser.getId() + FilePath.WRONG_ANSWERS);
@@ -86,7 +87,7 @@ public class App {
         // wrongFile이 이미 존재하고 있어야 의미있는 작업들
         FileManager.checkFileAuthority(wrongFile);
         FileManager.checkFileIntegrity(wrongFile,FilePath.WRONG_ANSWERS);
-        FileManager.removeDuplicates(wrongFile);
+        FileManager.removeWordEntryDuplicates(wrongFile);
         FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
         FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
     }
