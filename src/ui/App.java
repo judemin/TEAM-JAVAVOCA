@@ -17,6 +17,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static manager.FileManager.getCurrentPath;
+
 /**
  * 프로그램의 메인 흐름을 제어하고 사용자 메뉴를 처리합니다.
  */
@@ -201,7 +203,7 @@ public class App {
     }
 
     private boolean authenticateUser(String userId, String password) {
-        File userFile = new File("users.txt");
+        File userFile = new File(getCurrentPath(),"users.txt");
         if (!userFile.exists()) return false;
 
         try (Scanner fileScanner = new Scanner(userFile)) {
@@ -220,7 +222,7 @@ public class App {
     }
 
     private void saveUserToFile(String userId, String password) {
-        File userFile = new File("users.txt");
+        File userFile = new File(getCurrentPath(),"users.txt");
 
         try (FileWriter writer = new FileWriter(userFile, true)) {
             writer.write(userId + "," + password + "\n");
