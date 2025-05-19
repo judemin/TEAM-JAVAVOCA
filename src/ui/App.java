@@ -42,20 +42,24 @@ public class App {
         while (true) {
             String command = displayStartMenu();
 
+            boolean loginSuccess = false;
+
             switch (command) {
                 case "1":
-                    loginFlow();
+                    loginSuccess = loginFlow();
                     break;
                 case "2":
-                    signupFlow();
+                    loginSuccess = signupFlow();
                     break;
                 default:
                     System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
                     continue;
             }
 
-            // 로그인 또는 회원가입 성공한 경우만 다음 메뉴로 이동
-            runMainMenu();
+            if (loginSuccess) {
+                quizManager.setCurrentUserId(loggedInUser.getId());
+                runMainMenu();
+            }
         }
     }
 
@@ -87,7 +91,7 @@ public class App {
         }
     }
 
-    private void loginFlow() {
+    private boolean loginFlow() {
         String inputId;
         while (true) {
             System.out.print("로그인을 하기 위해 아이디를 입력해주세요.\nJavavoca > ");
@@ -124,27 +128,25 @@ public class App {
             break;
         }
 
-        // 아이디+비밀번호가 users.txt에 존재하는지 확인
         if (!authenticateUser(inputId, inputPw)) {
-            System.out.println("오류 메시지를 출력하고, 입력하신 아이디 또는 비밀번호가 일치하지 않습니다.");
-            return;
+            System.out.println("입력하신 아이디 또는 비밀번호가 일치하지 않습니다.");
+            return false;
         }
 
         System.out.println("로그인이 성공적으로 완료되었습니다!");
         this.loggedInUser = new User(inputId, inputPw);
 
-        // 로그인 후 파일 로딩
         try {
-            initFileSystem(); // 이미 run()에서 쓰던 메서드 재사용
-            System.out.println("모든 파일이 성공적으로 로드되었고 로그인 모드가 끝나고 메인메뉴로 넘어갑니다.");
+            initFileSystem();
         } catch (IOException e) {
             System.out.println("파일 로딩 중 오류가 발생했습니다. 프로그램을 종료합니다.");
             System.exit(1);
         }
+
+        return true;
     }
 
-
-    private void signupFlow() {
+    private boolean signupFlow() {
         while (true) {
             System.out.print("회원가입을 위한 아이디를 입력해주세요.\nJavavoca > ");
             String inputId = scanner.nextLine().trim();
@@ -156,7 +158,7 @@ public class App {
 
             if (isUserIdExists(inputId)) {
                 System.out.println("사용자 데이터 파일에 중복 아이디가 존재합니다.");
-                continue;
+                return false;
             }
 
             System.out.print("비밀번호를 입력해주세요.\nJavavoca > ");
@@ -170,7 +172,7 @@ public class App {
             saveUserToFile(inputId, inputPw);
             this.loggedInUser = new User(inputId, inputPw);
             System.out.println("회원가입이 완료되었습니다.");
-            break;
+            return true;
         }
     }
 

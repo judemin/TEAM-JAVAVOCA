@@ -19,4 +19,11 @@ public class WrongWordRepository extends BaseRepository {
         return WRONG_WORD_REPOSITORY;
     }
 
+    @Override
+    public int count(String word) {
+        return (int) words.stream()
+                .filter(w -> w.getWord().equalsIgnoreCase(word))
+                .count();
+    }
+
 }

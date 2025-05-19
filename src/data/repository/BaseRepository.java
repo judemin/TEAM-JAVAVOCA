@@ -13,6 +13,10 @@ public abstract class BaseRepository {
         words.add(word);
     }
 
+    public int count(String word) {
+        return 0;
+    }
+
     public List<Word> getWordsList() {
         return words;
     }
