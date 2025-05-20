@@ -162,7 +162,7 @@ public abstract class BaseIO {
         }
     }
 
-    private static boolean isDistinct(Word word, List<Word> wordList) {
+    static boolean isDistinct(Word word, List<Word> wordList) {
         for (Word w : wordList) {
             if (w.equals(word)) {
                 System.out.println("이미 존재하는 단어입니다. 다시 입력해 주세요.");
@@ -176,7 +176,7 @@ public abstract class BaseIO {
         return true;
     }
 
-    private static void exitProgram() {
+    static void exitProgram() {
         System.out.println("프로그램을 종료합니다.");
         System.exit(1);
     }

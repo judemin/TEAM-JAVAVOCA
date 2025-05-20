@@ -3,6 +3,7 @@ package data.repository;
 import data.entity.Word;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WrongWordRepository extends BaseRepository {
 
@@ -16,6 +17,10 @@ public class WrongWordRepository extends BaseRepository {
 
     public void addWrongCount(int count){
         wrongCountList.add(count);
+    }
+
+    public List<Integer> getWrongCountList(){
+        return wrongCountList;
     }
 
     private WrongWordRepository() {
