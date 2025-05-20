@@ -110,8 +110,8 @@ public class QuizManager {
             int W = savedWordRepository.getWordsList().size();
 
             originalList.sort((w1, w2) -> {
-                int c1 = wrongWordRepository.count(w1.getWord());
-                int c2 = wrongWordRepository.count(w2.getWord());
+                int c1 = wrongWordRepository.count(w1);
+                int c2 = wrongWordRepository.count(w2);
                 double e1 = (double) c1 * D / (W + (double)c1 * D);
                 double e2 = (double) c2 * D / (W + (double)c2 * D);
                 return Double.compare(e2, e1);
@@ -190,7 +190,7 @@ public class QuizManager {
                     wrongFileIO.addWord(userWrongFile, question);
                     System.out.println("오답 데이터 파일에 추가합니다.");
                 } else {
-                    int currentCount = wrongWordRepository.count(question.getWord());
+                    int currentCount = wrongWordRepository.count(question);
                     System.out.println("현재 오답 수: " + currentCount);
                 }
                 wrongCount++;

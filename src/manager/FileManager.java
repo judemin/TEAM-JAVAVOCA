@@ -2,6 +2,8 @@ package manager;
 
 import data.entity.Word;
 import data.repository.BaseRepository;
+import data.repository.SavedWordRepository;
+import data.repository.WrongWordRepository;
 import enums.FilePath;
 import util.UserValidator;
 
@@ -308,6 +310,41 @@ public class FileManager {
                 String word = parts[0].trim();
                 String explanation = parts[1].trim();
                 repositoryType.addWord(Word.of(word,explanation));
+            }
+        } catch (Exception e) {
+            exitProgram();
+        }
+    }
+    public static void loadWordFile(File file) {
+        SavedWordRepository swr = SavedWordRepository.getInstance();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] parts = line.split(":", 2);
+                String word = parts[0].trim();
+                String explanation = parts[1].trim();
+                swr.addWord(Word.of(word, explanation));
+            }
+        } catch (Exception e) {
+            exitProgram();
+        }
+    }
+
+    public static void loadWrongFile(File file) {
+        WrongWordRepository wwr = WrongWordRepository.getInstance();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] parts = line.split(":", 3);
+                String word = parts[0].trim();
+                String explanation = parts[1].trim();
+                int wrongCount = Integer.parseInt(parts[2].trim());
+
+                wwr.addWord(Word.of(word, explanation));
+                wwr.addWrongCount(wrongCount);
             }
         } catch (Exception e) {
             exitProgram();

@@ -76,9 +76,10 @@ public class App {
         FileManager.checkFileIntegrity(wordFile,FilePath.WORDS);
 
         FileManager.removeWordEntryDuplicates(wordFile);
-        FileManager.loadFiles(wordFile, SavedWordRepository.getInstance());
+        FileManager.loadWordFile(wordFile);
 
-        File wrongFile = new File(loggedInUser.getId() + FilePath.WRONG_ANSWERS);
+        String wrongFileName = loggedInUser.getId() + FilePath.WRONG_ANSWERS.getPath();
+        File wrongFile = new File(wrongFileName);
         if (!wrongFile.exists()) {
             wrongFile.createNewFile();
             return;
@@ -89,7 +90,7 @@ public class App {
         FileManager.checkFileIntegrity(wrongFile,FilePath.WRONG_ANSWERS);
         FileManager.removeWordEntryDuplicates(wrongFile);
         FileManager.deleteWrongWordsNotInWordFile(wordFile, wrongFile);
-        FileManager.loadFiles(wrongFile, WrongWordRepository.getInstance());
+        FileManager.loadWrongFile(wrongFile);
     }
 
     private String displayStartMenu() {

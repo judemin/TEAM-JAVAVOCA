@@ -13,7 +13,7 @@ public abstract class BaseRepository {
         words.add(word);
     }
 
-    public int count(String word) {
+    public int count(Word word) {
         return 0;
     }
 

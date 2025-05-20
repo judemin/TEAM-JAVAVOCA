@@ -53,7 +53,7 @@ public class SearchManager {
                 String confirm = scanner.nextLine().trim().toLowerCase();
                 if (confirm.equals("yes")) {
                     Word target = matchedWords.get(0); // 첫 번째 결과만 대상으로 처리
-                    double errorRate = calculateErrorRate(target.getWord());
+                    double errorRate = calculateErrorRate(target);
                     if (errorRate > 0.3) {
                         System.out.println("[오류] 이 단어는 오답률이 0.3을 초과하여 수정할 수 없습니다. (오답률: " + errorRate + ")");
                         return;
@@ -78,7 +78,7 @@ public class SearchManager {
         }
     }
 
-    private double calculateErrorRate(String word) {
+    private double calculateErrorRate(Word word) {
         int wrongCount = wrongRepository.count(word);
         return (double) wrongCount * savedSize / (savedSize + wrongCount * savedSize);
     }

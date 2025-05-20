@@ -1,5 +1,7 @@
 package data.repository;
 
+import data.entity.Word;
+
 import java.util.ArrayList;
 
 public class WrongWordRepository extends BaseRepository {
@@ -10,8 +12,15 @@ public class WrongWordRepository extends BaseRepository {
         WRONG_WORD_REPOSITORY = new WrongWordRepository();
     }
 
+    private ArrayList<Integer> wrongCountList;
+
+    public void addWrongCount(int count){
+        wrongCountList.add(count);
+    }
+
     private WrongWordRepository() {
         words = new ArrayList<>();
+        wrongCountList = new ArrayList<>();
     }
 
     // 전역 접근 메서드
@@ -20,10 +29,32 @@ public class WrongWordRepository extends BaseRepository {
     }
 
     @Override
-    public int count(String word) {
-        return (int) words.stream()
-                .filter(w -> w.getWord().equalsIgnoreCase(word))
-                .count();
+    public int count(Word word) {
+        int i = getWordIndex(word);
+        if(i == words.size()){
+            throw new IllegalArgumentException("존재하지 않는 단어");
+        }
+        return wrongCountList.get(i);
     }
 
+    @Override
+    public void removeWord(Word word) {
+        int i = getWordIndex(word);
+        if(i == words.size()){
+            throw new IllegalArgumentException("존재하지 않는 단어");
+        }
+        words.remove(i);
+        wrongCountList.remove(i);
+    }
+
+    private int getWordIndex(Word word) {
+        int i;
+        for(i=0;i<words.size();i++){
+            Word entry = words.get(i);
+            if(entry.getWord().equalsIgnoreCase(word.getWord())){
+                break;
+            }
+        }
+        return i;
+    }
 }
