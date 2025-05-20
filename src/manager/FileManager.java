@@ -245,7 +245,7 @@ public class FileManager {
                 } else if (recordMap.containsValue(explanation)) {
                     duplicatedList.add("뜻풀이 " + explanation);
                 } else {
-                    recordMap.put(word, explanation);
+                    recordMap.put(word.toLowerCase(), explanation.toLowerCase());
                     filteredLines.add(line);
                 }
             }
