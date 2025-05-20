@@ -7,6 +7,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,4 +81,40 @@ public class WrongFileIO extends BaseIO {
         }
     }
 
+    @Override
+    public void IncrementWrongCount(Word question, File file) {
+        WrongWordRepository wwr = WrongWordRepository.getInstance();
+        int changedCount = wwr.getCount(question) + 1;
+        wwr.setCount(question, changedCount);
+
+        try {
+            Path path = file.toPath();
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+            List<String> updated = new ArrayList<>();
+
+            for (String line : lines) {
+                String trimmed = line.trim();
+                if (trimmed.isEmpty()) {
+                    // 빈 줄은 그대로
+                    updated.add(line);
+                    continue;
+                }
+                // ':' 첫 분리만 써서 key 추출
+                String key = trimmed.split(":", 2)[0].trim();
+                if (key.equals(question.getWord())) {
+                    // parts 마지막 필드를 변경
+                    String[] parts = line.split(":", -1);
+                    parts[parts.length - 1] = " " + changedCount;
+                    updated.add(String.join(":", parts));
+                } else {
+                    updated.add(line);
+                }
+            }
+
+            Files.write(path, updated, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            System.out.println("파일 업데이트 중 오류 발생: " + e.getMessage());
+            System.exit(1);
+        }
+    }
 }

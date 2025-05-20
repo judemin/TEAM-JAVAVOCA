@@ -166,7 +166,7 @@ public class QuizManager {
                     } else if (attempts == 2) {
                         System.out.println("틀렸습니다! 시도 횟수: 2, 마지막글자: " + answer.charAt(answer.length() - 1));
                     } else {
-                        System.out.println("시도 횟수가 초과되었습니다.");
+                        System.out.print("시도 횟수가 초과되었습니다. ");
                     }
                 }
             }
@@ -175,16 +175,16 @@ public class QuizManager {
                 boolean alreadyExists = wrongWordRepository.exists(question);
                 if (!alreadyExists) {
                     wrongFileIO.addWord(userWrongFile, question);
-                    System.out.println("오답 데이터 파일에 추가합니다.");
+                    System.out.print("오답 데이터 파일에 추가합니다. ");
                 } else {
                     int currentCount = wrongWordRepository.getCount(question);
-                    wrongWordRepository.setCount(question, currentCount++);
-                    System.out.println("현재 오답 수: " + currentCount);
+                    wrongFileIO.IncrementWrongCount(question, userWrongFile);
+                    System.out.print("현재 오답 수: " + (currentCount + 1) + ". ");
                 }
                 wrongCount++;
             }
 
-            System.out.println();
+            System.out.println("다음 문제로 넘어갑니다");
         }
 
         System.out.println("맞은 개수: " + correctCount + "개");
