@@ -28,6 +28,12 @@ public class WrongFileIO extends BaseIO {
     }
 
     @Override
+    void addWordIfDistinct(File file, Word word, List<Word> wordList) throws IOException {
+        super.addWordIfDistinct(file, word, wordList);
+
+    }
+
+    @Override
     public void removeWord(File file, Word word) throws IOException {
         List<Word> wordList = WrongWordRepository.getInstance().getWordsList();
         removeWordIfExists(file, word, wordList);

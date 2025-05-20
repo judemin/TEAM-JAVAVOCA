@@ -2,7 +2,6 @@ package manager;
 
 import data.entity.Word;
 import data.repository.BaseRepository;
-import enums.FilePath;
 import io.BaseIO;
 
 import java.io.*;
@@ -66,18 +65,6 @@ public class QuizManager {
 
         File userWrongFile = getUserWrongFile();
 
-        // 파일 없으면 자동 생성
-        if (!userWrongFile.exists()) {
-            boolean created = userWrongFile.createNewFile();
-            if (created) {
-                System.out.println("> 사용자 오답 파일 생성됨: " + userWrongFile.getAbsolutePath());
-            }
-        }
-
-        if (useWrongMode) {
-            wrongWordRepository.getWordsList().clear();
-            FileManager.loadFiles(userWrongFile, wrongWordRepository);
-        }
 
         List<Word> sourceList = useWrongMode
                 ? wrongWordRepository.getWordsList()
@@ -110,8 +97,8 @@ public class QuizManager {
             int W = savedWordRepository.getWordsList().size();
 
             originalList.sort((w1, w2) -> {
-                int c1 = wrongWordRepository.count(w1);
-                int c2 = wrongWordRepository.count(w2);
+                int c1 = wrongWordRepository.getCount(w1);
+                int c2 = wrongWordRepository.getCount(w2);
                 double e1 = (double) c1 * D / (W + (double)c1 * D);
                 double e2 = (double) c2 * D / (W + (double)c2 * D);
                 return Double.compare(e2, e1);
@@ -190,7 +177,8 @@ public class QuizManager {
                     wrongFileIO.addWord(userWrongFile, question);
                     System.out.println("오답 데이터 파일에 추가합니다.");
                 } else {
-                    int currentCount = wrongWordRepository.count(question);
+                    int currentCount = wrongWordRepository.getCount(question);
+                    wrongWordRepository.setCount(question, currentCount++);
                     System.out.println("현재 오답 수: " + currentCount);
                 }
                 wrongCount++;

@@ -79,7 +79,7 @@ public class App {
         FileManager.loadWordFile(wordFile);
 
         String wrongFileName = loggedInUser.getId() + FilePath.WRONG_ANSWERS.getPath();
-        File wrongFile = new File(wrongFileName);
+        File wrongFile = new File(getCurrentPath(),wrongFileName);
         if (!wrongFile.exists()) {
             wrongFile.createNewFile();
             return;

@@ -154,7 +154,7 @@ public class FileManager {
                 }
 
                 // count 검증
-                if (!countStr.matches("^\"d{1,2}$")) { // 0~99 두 자리까지 허용, 아래에서 범위 체크
+                if (!countStr.matches("^\\d{1,2}$")) { // 0~99 두 자리까지 허용, 아래에서 범위 체크
                     errorLineList.add(line);
                     continue;
                 }
@@ -381,7 +381,7 @@ public class FileManager {
                     filteredLines.add(line);
                     continue;
                 }
-                String[] parts = line.split(":", 2);
+                String[] parts = line.split(":", 3);
                 String word = parts[0].trim();
                 String explanation = parts[1].trim();
                 if (wordHashSet.contains(Word.of(word,explanation))) {

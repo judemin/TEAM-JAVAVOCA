@@ -27,22 +27,20 @@ public class WrongWordRepository extends BaseRepository {
     public static WrongWordRepository getInstance() {
         return WRONG_WORD_REPOSITORY;
     }
-
     @Override
-    public int count(Word word) {
+    public int getCount(Word word) {
         int i = getWordIndex(word);
-        if(i == words.size()){
-            throw new IllegalArgumentException("존재하지 않는 단어");
-        }
         return wrongCountList.get(i);
+    }
+    @Override
+    public void setCount(Word word, int count){
+        int i = getWordIndex(word);
+        wrongCountList.set(i,count);
     }
 
     @Override
     public void removeWord(Word word) {
         int i = getWordIndex(word);
-        if(i == words.size()){
-            throw new IllegalArgumentException("존재하지 않는 단어");
-        }
         words.remove(i);
         wrongCountList.remove(i);
     }
@@ -54,6 +52,9 @@ public class WrongWordRepository extends BaseRepository {
             if(entry.getWord().equalsIgnoreCase(word.getWord())){
                 break;
             }
+        }
+        if(i == words.size()){
+            throw new IllegalArgumentException("존재하지 않는 단어");
         }
         return i;
     }

@@ -79,7 +79,7 @@ public class SearchManager {
     }
 
     private double calculateErrorRate(Word word) {
-        int wrongCount = wrongRepository.count(word);
+        int wrongCount = wrongRepository.getCount(word);
         return (double) wrongCount * savedSize / (savedSize + wrongCount * savedSize);
     }
 

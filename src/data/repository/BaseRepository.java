@@ -13,10 +13,6 @@ public abstract class BaseRepository {
         words.add(word);
     }
 
-    public int count(Word word) {
-        return 0;
-    }
-
     public List<Word> getWordsList() {
         return words;
     }
@@ -31,4 +27,8 @@ public abstract class BaseRepository {
                 Objects.equals(entry.getWord(), word.getWord())
                         && Objects.equals(entry.getMeaning(), word.getMeaning()));
     }
+
+    public int getCount(Word word){ return Integer.MIN_VALUE; }
+
+    public void setCount(Word word, int count){}
 }
