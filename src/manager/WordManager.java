@@ -99,6 +99,7 @@ public class WordManager {
                 System.out.println("해당 단어의 오답률이 " + MINIMAL_DELETE_WRONGRATE + " 초과이므로 삭제할 수 없습니다.");
             } else {
                 // 단어 파일에서 삭제
+
                 wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord);
                 System.out.println("단어가 삭제되었습니다.");
 
@@ -143,9 +144,10 @@ public class WordManager {
             } else {
                 Word updatedWord = Word.of(word, meaning);
 
-                // words 파일 업데이트
+                // words 객체 내부 리스트 업데이트
                 records.remove(existingWord);
                 records.add(updatedWord);
+                // word 파일 업데이트
                 wordFileIO.editWordInFile(FileManager.getFile(FilePath.WORDS), updatedWord);
                 System.out.println("단어가 수정되었습니다.");
 
@@ -156,9 +158,12 @@ public class WordManager {
                         .filter(w -> w.getWord().equalsIgnoreCase(word))
                         .findFirst();
 
+                // 만약 오답파일에 해당 단어 있어?
                 if (matchedWrongWord.isPresent()) {
+                    // 내부 객체 리스트 수정
                     wrongWords.remove(matchedWrongWord.get());
                     wrongWords.add(updatedWord);
+                    // 파일에도 수정
                     wrongFileIO.editWrongWordInFile(updatedWord);
                 }
             }

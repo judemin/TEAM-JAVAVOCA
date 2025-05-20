@@ -16,7 +16,7 @@ public class FileManager {
 
     private static final int NOT_EXIST = -1;
     private static final String EMPTY_STRING = "";
-    private static final int WRONG_ANSWER_COUNT_LIMIT = 30;
+    private static final int WRONG_ANSWER_COUNT_LIMIT = 10;
 
     public static File getFile(FilePath fp) {
         File file = new File(getCurrentPath(), fp.getPath());
