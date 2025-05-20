@@ -29,6 +29,8 @@ public abstract class BaseIO {
 
     }
 
+    public void editWrongWordInFile(Word word) throws IOException{}
+
     /**
      * 주어진 단어를 파일에서 삭제합니다.
      * @param file 단어 데이터 파일 경로
@@ -135,6 +137,7 @@ public abstract class BaseIO {
      * @author 기찬
      */
     public abstract void removeWord(File file, Word word) throws IOException;
+    public void removeWord(Word word) throws IOException {};
 
     void writeWordListInFile(File file, List<Word> wordList) throws IOException {
 

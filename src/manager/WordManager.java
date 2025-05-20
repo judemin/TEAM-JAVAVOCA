@@ -4,24 +4,31 @@ import data.entity.Word;
 import data.repository.BaseRepository;
 import enums.FilePath;
 import io.BaseIO;
+import io.WrongFileIO;
+import util.WrongAnswerRateCalculator;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import static manager.FileManager.getCurrentPath;
+
 public class WordManager {
     private static final Pattern WORD_PATTERN = Pattern.compile("^[a-zA-Z]{1,50}$");
     private static final Pattern MEANING_PATTERN = Pattern.compile("^[a-zA-Z ]{1,255}$");
+    private static final double MINIMAL_EDIT_WRONGRATE = 0.3;
+    private static final double MINIMAL_DELETE_WRONGRATE = 0.1;
+
 
     private Scanner scanner;
-    private final BaseRepository baseRepository;
+    private final BaseRepository wordRepository;
     private final BaseRepository wrongRepository;
     private final BaseIO wordFileIO;
     private final BaseIO wrongFileIO;
 
-    public WordManager(Scanner scanner, BaseRepository baseRepository, BaseRepository wrongRepository, BaseIO wordFileIO, BaseIO wrongFileIO) {
+    public WordManager(Scanner scanner, BaseRepository wordRepository, BaseRepository wrongRepository, BaseIO wordFileIO, BaseIO wrongFileIO) {
         this.scanner = scanner;
-        this.baseRepository = baseRepository;
+        this.wordRepository = wordRepository;
         this.wrongRepository = wrongRepository;
         this.wordFileIO = wordFileIO;
         this.wrongFileIO = wrongFileIO;
@@ -64,7 +71,7 @@ public class WordManager {
     }
 
     private void removeWord() throws IOException {
-        List<Word> records = baseRepository.getWordsList();
+        List<Word> records = wordRepository.getWordsList();
 
         if (records.isEmpty()) {
             System.out.println("단어 데이터 파일에 데이터가 존재하지 않습니다!");
@@ -88,24 +95,29 @@ public class WordManager {
 
         System.out.print("정말 삭제하시겠습니까? (Y/그 외) > ");
         if (scanner.nextLine().equals("Y")) {
-            // 단어 파일에서 삭제
-            wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord);
-            System.out.println("단어가 삭제되었습니다.");
+            if(WrongAnswerRateCalculator.getWrongRate(existingWord) > MINIMAL_DELETE_WRONGRATE){
+                System.out.println("해당 단어의 오답률이 " + MINIMAL_DELETE_WRONGRATE + " 초과이므로 삭제할 수 없습니다.");
+            } else {
+                // 단어 파일에서 삭제
+                wordFileIO.removeWord(FileManager.getFile(FilePath.WORDS), existingWord);
+                System.out.println("단어가 삭제되었습니다.");
 
-            // 오답 파일에도 존재하면 삭제
-            List<Word> wrongWords = wrongRepository.getWordsList();
-            Optional<Word> wrongWord = wrongWords.stream()
-                    .filter(w -> w.getWord().equalsIgnoreCase(word))
-                    .findFirst();
+                // 오답 파일에도 존재하면 삭제
+                List<Word> wrongWords = wrongRepository.getWordsList();
+                Optional<Word> wrongWord = wrongWords.stream()
+                        .filter(w -> w.getWord().equalsIgnoreCase(word))
+                        .findFirst();
 
-            if (wrongWord.isPresent()) {
-                wrongFileIO.removeWord(FileManager.getFile(FilePath.WRONG_ANSWERS), wrongWord.get());
+
+                if (wrongWord.isPresent()) {
+                    wrongFileIO.removeWord(existingWord);
+                }
             }
         }
     }
 
     private void updateWord() throws IOException {
-        List<Word> records = baseRepository.getWordsList();
+        List<Word> records = wordRepository.getWordsList();
 
         if (records.isEmpty()) {
             System.out.println("단어 데이터 파일에 데이터가 존재하지 않습니다!");
@@ -126,25 +138,29 @@ public class WordManager {
         String meaning = promptMeaningWithDuplicateCheckUpdateWord(word);
 
         if (confirmSave(word, meaning)) {
-            Word updatedWord = Word.of(word, meaning);
+            if(WrongAnswerRateCalculator.getWrongRate(existingWord) > MINIMAL_EDIT_WRONGRATE){
+                System.out.println("해당 단어의 오답률이 " + MINIMAL_EDIT_WRONGRATE + " 초과이므로 수정할 수 없습니다.");
+            } else {
+                Word updatedWord = Word.of(word, meaning);
 
-            // words 파일 업데이트
-            records.remove(existingWord);
-            records.add(updatedWord);
-            wordFileIO.editWordInFile(FileManager.getFile(FilePath.WORDS), updatedWord);
-            System.out.println("단어가 수정되었습니다.");
+                // words 파일 업데이트
+                records.remove(existingWord);
+                records.add(updatedWord);
+                wordFileIO.editWordInFile(FileManager.getFile(FilePath.WORDS), updatedWord);
+                System.out.println("단어가 수정되었습니다.");
 
-            // wrong_answers 파일에도 같은 단어가 있으면 수정
-            List<Word> wrongWords = wrongRepository.getWordsList();
+                // wrong_answers 파일에도 같은 단어가 있으면 수정
+                List<Word> wrongWords = wrongRepository.getWordsList();
 
-            Optional<Word> matchedWrongWord = wrongWords.stream()
-                    .filter(w -> w.getWord().equalsIgnoreCase(word))
-                    .findFirst();
+                Optional<Word> matchedWrongWord = wrongWords.stream()
+                        .filter(w -> w.getWord().equalsIgnoreCase(word))
+                        .findFirst();
 
-            if (matchedWrongWord.isPresent()) {
-                wrongWords.remove(matchedWrongWord.get());
-                wrongWords.add(updatedWord);
-                wrongFileIO.editWordInFile(FileManager.getFile(FilePath.WRONG_ANSWERS), updatedWord);
+                if (matchedWrongWord.isPresent()) {
+                    wrongWords.remove(matchedWrongWord.get());
+                    wrongWords.add(updatedWord);
+                    wrongFileIO.editWrongWordInFile(updatedWord);
+                }
             }
         }
 
@@ -175,7 +191,7 @@ public class WordManager {
                 continue;
             }
 
-            List<Word> wordsList = baseRepository.getWordsList();
+            List<Word> wordsList = wordRepository.getWordsList();
             for (Word w : wordsList) {
                 if (w.getWord().equalsIgnoreCase(word)) {
                     System.out.println("기존 단어와 같은 단어가 존재합니다.");
@@ -190,7 +206,7 @@ public class WordManager {
     }
 
     private String promptMeaningWithDuplicateCheck(String word) {
-        List<Word> wordsList = baseRepository.getWordsList();
+        List<Word> wordsList = wordRepository.getWordsList();
 
         while (true) {
             System.out.print("뜻: ");
@@ -215,7 +231,7 @@ public class WordManager {
     }
 
     private String promptMeaningWithDuplicateCheckUpdateWord(String word) {
-        List<Word> wordsList = baseRepository.getWordsList();
+        List<Word> wordsList = wordRepository.getWordsList();
 
         while (true) {
             System.out.print("뜻: ");

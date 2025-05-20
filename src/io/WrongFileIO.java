@@ -2,22 +2,28 @@ package io;
 
 import data.entity.Word;
 import data.repository.WrongWordRepository;
+import enums.FilePath;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static manager.FileManager.getCurrentPath;
+
 /**
  * 오답 데이터 파일을 관리하는 클래스입니다.
  */
 public class WrongFileIO extends BaseIO {
     private static final WrongFileIO wrongFileIO;
+
+    private static String userId;
+
+    public static void setUserId(String userId) {
+        WrongFileIO.userId = userId;
+    }
 
     static {
         wrongFileIO = new WrongFileIO();
@@ -56,6 +62,15 @@ public class WrongFileIO extends BaseIO {
     }
 
     @Override
+    public void removeWord(Word word) throws IOException {
+        if (userId == null){
+            return;
+        }
+        String wrongFileName = userId + FilePath.WRONG_ANSWERS.getPath();
+        removeWord(new File(getCurrentPath(),wrongFileName), word);
+    }
+
+    @Override
     public void removeWord(File file, Word word) throws IOException {
         List<Word> wordList = WrongWordRepository.getInstance().getWordsList();
         removeWordIfExists(file, word, wordList);
@@ -79,6 +94,8 @@ public class WrongFileIO extends BaseIO {
         } else {
             System.out.println("해당 단어를 찾을 수 없습니다.");
         }
+
+        // TODO 파일 처리 부분 여기에 추가해 줘야함
     }
 
     @Override
@@ -116,5 +133,47 @@ public class WrongFileIO extends BaseIO {
             System.out.println("파일 업데이트 중 오류 발생: " + e.getMessage());
             System.exit(1);
         }
+    }
+    @Override
+    public void editWrongWordInFile(Word word) throws IOException{
+        String wrongFileName = userId + FilePath.WRONG_ANSWERS.getPath();
+        File file = new File(getCurrentPath(),wrongFileName);
+        ArrayList<String> filteredLines = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
+                if(line.trim().isEmpty()){
+                    filteredLines.add(line);
+                    continue;
+                }
+
+                String[] parts = line.split(":", 3);
+                String engWord = parts[0].trim();
+                String explanation = parts[1].trim();
+
+                if (engWord.equalsIgnoreCase(word.getWord())) {
+                    String[] temp = line.split(explanation);
+                    if(temp.length >= 2){
+                        filteredLines.add(temp[0] + word.getMeaning() + temp[1]);
+                    } else {
+                        filteredLines.add(temp[0] + word.getMeaning());
+                    }
+                } else {
+                    filteredLines.add(line);
+                }
+            }
+
+        } catch (Exception e) {
+            exitProgram();
+        }
+
+        try {
+            Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            exitProgram();
+        }
+
     }
 }

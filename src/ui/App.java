@@ -24,7 +24,7 @@ import static manager.FileManager.getCurrentPath;
  */
 public class App {
 /**
- * p10 users.txt는 “사용자 정보”가 기록된 형식의 텍스트 파일이며, 프로그램 실행 시 반드시 존재해야 합니다.
+ * TODO WordManager에서 수정(오답횟수 + 1 되는거 포함) / 삭제 시 프로그램 안 객체 / 파일에 둘 다 반영되는지 코드로 확인하고 수정해 줘야함.
  *
  */
     private WordManager wordManager;
@@ -57,6 +57,7 @@ public class App {
             if (loginSuccess) {
                 initWordAndWrongFiles();
                 quizManager.setCurrentUserId(loggedInUser.getId());
+                WrongFileIO.setUserId(loggedInUser.getId());
                 runMainMenu();
             }
         }
