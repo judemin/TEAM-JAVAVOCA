@@ -24,6 +24,31 @@ public class FileManager {
         return file;
     }
 
+    public static ArrayList<File> getAllWrongFileNames(){
+        ArrayList<File> list = new ArrayList<>();
+        File userFile = getFile(FilePath.USER_INFO);
+        // userfile.txt는 무결성 체크 안 해도 됨.
+        try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if(line.trim().isEmpty()) continue;
+                String[] parts = line.split(":", 2);
+                String eachUserId = parts[0].trim();
+                String wrongFileName = eachUserId + FilePath.WRONG_ANSWERS.getPath();
+                File wrongFile = new File(getCurrentPath(),wrongFileName);
+                // 존재하면 넣기. 유저파일에서 아이디 조회 => 실제로 없다면, 리스트에 넣지 않는다.
+                if(wrongFile.exists()){
+                    list.add(wrongFile);
+                }
+            }
+        } catch (Exception e) {
+            exitProgram();
+        }
+        // test용
+        list.forEach(file -> System.out.println(file.getAbsolutePath()));
+        return list;
+    }
+
     public static String getCurrentPath(){
         String currentPath = System.getProperty("user.home");
         if (currentPath == null || currentPath.trim().isEmpty()) {

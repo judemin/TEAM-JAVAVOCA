@@ -42,6 +42,7 @@ public class App {
     }
 
     public void run() throws IOException {
+        FileManager.getAllWrongFileNames();
         initUserFile();
         while (true) {
             String command = displayStartMenu();
