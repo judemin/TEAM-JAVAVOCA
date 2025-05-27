@@ -55,7 +55,7 @@ public class App {
                 default -> false;
             };
 
-            if (loginSuccess) {
+            if (command.equals("1") && loginSuccess) {
                 initWordAndWrongFiles();
                 quizManager.setCurrentUserId(loggedInUser.getId());
                 WrongFileIO.setUserId(loggedInUser.getId());
