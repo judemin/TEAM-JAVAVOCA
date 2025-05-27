@@ -44,7 +44,7 @@ public class FileManager {
         } catch (Exception e) {
             exitProgram();
         }
-        // test용
+        // test
         list.forEach(file -> System.out.println(file.getAbsolutePath()));
         return list;
     }

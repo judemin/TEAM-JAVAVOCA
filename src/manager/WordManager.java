@@ -113,6 +113,17 @@ public class WordManager {
                 if (wrongWord.isPresent()) {
                     wrongFileIO.removeWord(existingWord);
                 }
+
+                // 다른 오답 파일에도 삭제
+                // 1. 각각의 권한, 무결성 검사 진행
+                // 2.
+                ArrayList<File> allWrongFileNames = FileManager.getAllWrongFileNames();
+                allWrongFileNames.forEach(wrongFile -> {
+                    FileManager.checkFileAuthority(wrongFile);
+                    FileManager.checkFileIntegrity(wrongFile,FilePath.WRONG_ANSWERS);
+                    // 이제 열고 수정해도 상관없음.
+                    BaseIO.removeWordInFile(wrongFile,existingWord);
+                });
             }
         }
     }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class BaseIO {
+public class BaseIO {
 
     /**
      * 주어진 단어를 파일에 저장합니다.
@@ -37,7 +37,7 @@ public abstract class BaseIO {
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      * @author 기찬, 승우
      */
-    public void removeWordInFile(File file, Word word) throws IOException{
+    public static void removeWordInFile(File file, Word word) {
         ArrayList<String> filteredLines = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -126,7 +126,7 @@ public abstract class BaseIO {
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      * @author 기찬
      */
-    public abstract void addWord(File file, Word word) throws IOException;
+    public void addWord(File file, Word word) throws IOException {};
 
     /**
      * 단어 목록에서 해당 단어를 제거하고 파일을 갱신합니다.
@@ -136,7 +136,7 @@ public abstract class BaseIO {
      * @throws IOException 파일을 쓰는 중 오류가 발생한 경우
      * @author 기찬
      */
-    public abstract void removeWord(File file, Word word) throws IOException;
+    public void removeWord(File file, Word word) throws IOException {};
     public void removeWord(Word word) throws IOException {};
 
     void writeWordListInFile(File file, List<Word> wordList) throws IOException {
