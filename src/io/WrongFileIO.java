@@ -134,46 +134,11 @@ public class WrongFileIO extends BaseIO {
             System.exit(1);
         }
     }
+
     @Override
-    public void editWrongWordInFile(Word word) throws IOException{
+    public void editWrongWord(Word word) {
         String wrongFileName = userId + FilePath.WRONG_ANSWERS.getPath();
         File file = new File(getCurrentPath(),wrongFileName);
-        ArrayList<String> filteredLines = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-
-            while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
-                if(line.trim().isEmpty()){
-                    filteredLines.add(line);
-                    continue;
-                }
-
-                String[] parts = line.split(":", 3);
-                String engWord = parts[0].trim();
-                String explanation = parts[1].trim();
-
-                if (engWord.equalsIgnoreCase(word.getWord())) {
-                    String[] temp = line.split(explanation);
-                    if(temp.length >= 2){
-                        filteredLines.add(temp[0] + word.getMeaning() + temp[1]);
-                    } else {
-                        filteredLines.add(temp[0] + word.getMeaning());
-                    }
-                } else {
-                    filteredLines.add(line);
-                }
-            }
-
-        } catch (Exception e) {
-            exitProgram();
-        }
-
-        try {
-            Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            exitProgram();
-        }
-
+        BaseIO.editWrongWordInFile(file, word);
     }
 }

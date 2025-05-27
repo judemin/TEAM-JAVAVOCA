@@ -95,6 +95,8 @@ public class WordManager {
 
         System.out.print("정말 삭제하시겠습니까? (Y/그 외) > ");
         if (scanner.nextLine().equals("Y")) {
+            // test
+            System.out.println(WrongAnswerRateCalculator.getWrongRate(existingWord));
             if(WrongAnswerRateCalculator.getWrongRate(existingWord) > MINIMAL_DELETE_WRONGRATE){
                 System.out.println("해당 단어의 오답률이 " + MINIMAL_DELETE_WRONGRATE + " 초과이므로 삭제할 수 없습니다.");
             } else {
@@ -115,8 +117,7 @@ public class WordManager {
                 }
 
                 // 다른 오답 파일에도 삭제
-                // 1. 각각의 권한, 무결성 검사 진행
-                // 2.
+                // 각각의 권한, 무결성 검사 진행
                 ArrayList<File> allWrongFileNames = FileManager.getAllWrongFileNames();
                 allWrongFileNames.forEach(wrongFile -> {
                     FileManager.checkFileAuthority(wrongFile);
@@ -175,8 +176,19 @@ public class WordManager {
                     wrongWords.remove(matchedWrongWord.get());
                     wrongWords.add(updatedWord);
                     // 파일에도 수정
-                    wrongFileIO.editWrongWordInFile(updatedWord);
+                    wrongFileIO.editWrongWord(updatedWord);
                 }
+
+
+                // 다른 사용자 오답파일에도 해당 단어 있어?
+                // 각각의 권한, 무결성 검사 진행
+                ArrayList<File> allWrongFileNames = FileManager.getAllWrongFileNames();
+                allWrongFileNames.forEach(wrongFile -> {
+                    FileManager.checkFileAuthority(wrongFile);
+                    FileManager.checkFileIntegrity(wrongFile,FilePath.WRONG_ANSWERS);
+                    // 이제 열고 수정해도 상관없음.
+                    BaseIO.editWrongWordInFile(wrongFile,existingWord);
+                });
             }
         }
 
