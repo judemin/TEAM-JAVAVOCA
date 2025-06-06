@@ -1,0 +1,6 @@
+@startuml
+participant Actor
+Actor -> FileManager : removeUserEntryDuplicates
+activate FileManager
+return
+@enduml

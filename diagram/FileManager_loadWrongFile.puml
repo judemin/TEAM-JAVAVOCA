@@ -1,0 +1,27 @@
+@startuml
+participant Actor
+Actor -> FileManager : loadWrongFile
+activate FileManager
+FileManager -> WrongWordRepository : getInstance
+activate WrongWordRepository
+WrongWordRepository --> FileManager
+deactivate WrongWordRepository
+FileManager -> Word : of
+activate Word
+Word -> Word : new
+activate Word
+Word --> Word
+deactivate Word
+Word --> FileManager
+deactivate Word
+FileManager -> BaseRepository : addWord
+activate BaseRepository
+BaseRepository --> FileManager
+deactivate BaseRepository
+FileManager -> WrongWordRepository : addWrongCount
+activate WrongWordRepository
+WrongWordRepository --> FileManager
+deactivate WrongWordRepository
+
+return
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+participant Actor
+Actor -> FileManager : loadWordFile
+activate FileManager
+FileManager -> SavedWordRepository : getInstance
+activate SavedWordRepository
+SavedWordRepository --> FileManager
+deactivate SavedWordRepository
+FileManager -> Word : of
+activate Word
+Word -> Word : new
+activate Word
+Word --> Word
+deactivate Word
+Word --> FileManager
+deactivate Word
+FileManager -> BaseRepository : addWord
+activate BaseRepository
+BaseRepository --> FileManager
+deactivate BaseRepository
+return
+@enduml

@@ -187,7 +187,7 @@ public class WordManager {
                     FileManager.checkFileAuthority(wrongFile);
                     FileManager.checkFileIntegrity(wrongFile,FilePath.WRONG_ANSWERS);
                     // 이제 열고 수정해도 상관없음.
-                    BaseIO.editWrongWordInFile(wrongFile,existingWord);
+                    BaseIO.editWrongWordInFile(wrongFile,updatedWord);
                 });
             }
         }

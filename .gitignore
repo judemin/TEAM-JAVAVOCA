@@ -23,3 +23,6 @@ out/
 # OS에서 생성하는 파일들
 .DS_Store
 Thumbs.db
+
+
+.diagram

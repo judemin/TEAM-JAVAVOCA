@@ -1,0 +1,30 @@
+@startuml
+participant Actor
+Actor -> FileManager : getAllWrongFileNames
+activate FileManager
+FileManager -> FileManager : getFile
+activate FileManager
+FileManager -> FileManager : getCurrentPath
+activate FileManager
+
+FileManager --> FileManager
+deactivate FileManager
+FileManager -> FilePath : getPath
+activate FilePath
+FilePath --> FileManager
+deactivate FilePath
+
+FileManager --> FileManager
+deactivate FileManager
+FileManager -> FilePath : getPath
+activate FilePath
+FilePath --> FileManager
+deactivate FilePath
+FileManager -> FileManager : getCurrentPath
+activate FileManager
+
+FileManager --> FileManager
+deactivate FileManager
+
+return
+@enduml

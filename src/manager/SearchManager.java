@@ -47,30 +47,30 @@ public class SearchManager {
             } else {
                 matchedWords.forEach(word ->
                         System.out.println(word.getWord().toLowerCase() + " : " + word.getMeaning()));
-
-                System.out.println("수정하시겠습니까? (yes / no)");
-                System.out.print("Javavoca > ");
-                String confirm = scanner.nextLine().trim().toLowerCase();
-                if (confirm.equals("yes")) {
-                    Word target = matchedWords.get(0); // 첫 번째 결과만 대상으로 처리
-                    double errorRate = calculateErrorRate(target);
-                    if (errorRate > 0.3) {
-                        System.out.println("[오류] 이 단어는 오답률이 0.3을 초과하여 수정할 수 없습니다. (오답률: " + errorRate + ")");
-                        return;
-                    }
-
-                    System.out.print("새 단어를 입력하세요: ");
-                    String newWord = scanner.nextLine().trim();
-                    System.out.print("새 뜻풀이를 입력하세요: ");
-                    String newMeaning = scanner.nextLine().trim();
-
-                    try (FileWriter writer = new FileWriter("words.txt", true)) {
-                        writer.write(newWord + ":" + newMeaning + "\n");
-                        System.out.println("단어가 성공적으로 추가되었습니다.");
-                    } catch (IOException e) {
-                        System.out.println("파일에 쓰는 중 오류 발생: " + e.getMessage());
-                    }
-                }
+//
+//                System.out.println("수정하시겠습니까? (yes / no)");
+//                System.out.print("Javavoca > ");
+//                String confirm = scanner.nextLine().trim().toLowerCase();
+//                if (confirm.equals("yes")) {
+//                    Word target = matchedWords.get(0); // 첫 번째 결과만 대상으로 처리
+//                    double errorRate = calculateErrorRate(target);
+//                    if (errorRate > 0.3) {
+//                        System.out.println("[오류] 이 단어는 오답률이 0.3을 초과하여 수정할 수 없습니다. (오답률: " + errorRate + ")");
+//                        return;
+//                    }
+//
+//                    System.out.print("새 단어를 입력하세요: ");
+//                    String newWord = scanner.nextLine().trim();
+//                    System.out.print("새 뜻풀이를 입력하세요: ");
+//                    String newMeaning = scanner.nextLine().trim();
+//
+//                    try (FileWriter writer = new FileWriter("words.txt", true)) {
+//                        writer.write(newWord + ":" + newMeaning + "\n");
+//                        System.out.println("단어가 성공적으로 추가되었습니다.");
+//                    } catch (IOException e) {
+//                        System.out.println("파일에 쓰는 중 오류 발생: " + e.getMessage());
+//                    }
+//                }
             }
 
             System.out.println("-----------------------------------------------------------------------------------------");

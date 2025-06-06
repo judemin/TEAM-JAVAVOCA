@@ -1,0 +1,14 @@
+@startuml
+participant Actor
+Actor -> FileManager : checkUserFileIntegrity
+activate FileManager
+FileManager -> UserValidator : isValid
+activate UserValidator
+UserValidator --> FileManager
+deactivate UserValidator
+FileManager -> UserValidator : isValid
+activate UserValidator
+UserValidator --> FileManager
+deactivate UserValidator
+return
+@enduml

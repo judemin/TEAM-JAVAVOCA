@@ -1,0 +1,7 @@
+@startuml
+participant Actor
+Actor -> FileManager : checkWrongAnswerFileIntegrity
+activate FileManager
+
+return
+@enduml

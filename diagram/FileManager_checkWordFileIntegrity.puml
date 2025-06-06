@@ -1,0 +1,7 @@
+@startuml
+participant Actor
+Actor -> FileManager: checkWordFileIntegrity
+activate FileManager
+
+return
+@enduml
