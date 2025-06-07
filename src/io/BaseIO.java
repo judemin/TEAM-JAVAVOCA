@@ -51,11 +51,11 @@ public class BaseIO {
                 String explanation = parts[1].trim();
 
                 if (engWord.equalsIgnoreCase(word.getWord())) {
-                    String[] temp = line.split(explanation);
-                    if(temp.length >= 2){
-                        filteredLines.add(temp[0] + word.getMeaning() + temp[1]);
-                    } else {
-                        filteredLines.add(temp[0] + word.getMeaning());
+                    String[] temp = line.split(":");
+                    if(temp.length >= 3){ // 오답파일일 경우
+                        filteredLines.add(temp[0] + ":" + word.getMeaning() + ":" + temp[2]);
+                    } else { //단어파일일 경우
+                        filteredLines.add(temp[0] + ":" + word.getMeaning());
                     }
                 } else {
                     filteredLines.add(line);
@@ -137,11 +137,11 @@ public class BaseIO {
                 String explanation = parts[1].trim();
 
                 if (engWord.equalsIgnoreCase(word.getWord())) {
-                    String[] temp = line.split(explanation);
-                    if(temp.length >= 2){
-                        filteredLines.add(temp[0] + word.getMeaning() + temp[1]);
-                    } else {
-                        filteredLines.add(temp[0] + word.getMeaning());
+                    String[] temp = line.split(":");
+                    if(temp.length >= 3){ // 오답파일일 경우
+                        filteredLines.add(temp[0] + ":" + word.getMeaning() + ":" + temp[2]);
+                    } else { //단어파일일 경우
+                        filteredLines.add(temp[0] + ":" + word.getMeaning());
                     }
                 } else {
                     filteredLines.add(line);
