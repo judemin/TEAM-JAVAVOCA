@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -253,8 +254,8 @@ public class BaseIO {
                 if (word.getWord().equalsIgnoreCase(wordText)) {
                     count = Math.max(0, count - 1);
                     if (count == 0) continue; // 제거
+                    System.out.println("현재 오답 수 :" + count);
                 }
-
                 updatedLines.add(wordText + ": " + meaning + ": " + count);
             }
 

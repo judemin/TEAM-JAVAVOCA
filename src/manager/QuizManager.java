@@ -160,8 +160,8 @@ public class QuizManager {
                             wrongFileIO.removeWord(userWrongFile, question);
                             System.out.println("맞았습니다! 위 단어는 오답 데이터 파일에서 삭제됩니다.");
                         } else {
-                            wrongFileIO.decrementWrongCount(question, userWrongFile);
                             System.out.println("맞았습니다!");
+                            wrongFileIO.decrementWrongCount(question, userWrongFile);
                         }
                     } else {
                         System.out.println("맞았습니다!");
