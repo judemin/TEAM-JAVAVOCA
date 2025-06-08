@@ -159,12 +159,14 @@ public class App {
     }
 
     private boolean signupFlow() {
+        String inputId;
+        System.out.print("회원가입을 위한 아이디를 입력해주세요.\n");
         while (true) {
-            System.out.print("회원가입을 위한 아이디를 입력해주세요.\nJavavoca > ");
-            String inputId = scanner.nextLine(); /*.trim();*/
+            System.out.print("Javavoca > ");
+            inputId = scanner.nextLine(); /*.trim();*/
 
             if (!UserValidator.isValid(inputId)) {
-                System.out.println("아이디 형식이 올바르지 않습니다. 다시 입력해주세요.");
+//                System.out.println("아이디 형식이 올바르지 않습니다. 다시 입력해주세요.");
                 continue;
             }
 
@@ -172,12 +174,15 @@ public class App {
                 System.out.println("사용자 데이터 파일에 중복 아이디가 존재합니다.");
                 return false;
             }
-
-            System.out.print("비밀번호를 입력해주세요.\nJavavoca > ");
+            break;
+        }
+        System.out.print("비밀번호를 입력해주세요.\n");
+        while(true){
+            System.out.print("Javavoca > ");
             String inputPw = scanner.nextLine(); /*.trim();*/
 
             if (!UserValidator.isValid(inputPw)) {
-                System.out.println("비밀번호 형식이 올바르지 않습니다. 다시 입력해주세요.");
+//                System.out.println("비밀번호 형식이 올바르지 않습니다. 다시 입력해주세요.");
                 continue;
             }
 
@@ -197,7 +202,7 @@ public class App {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 String[] tokens = line.split(":");
-                if (tokens.length >= 1 && tokens[0].equals(userId)) {
+                if (tokens.length >= 1 && tokens[0].trim().equals(userId)) {
                     return true;
                 }
             }
