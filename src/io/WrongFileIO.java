@@ -18,6 +18,7 @@ import static manager.FileManager.getCurrentPath;
  */
 public class WrongFileIO extends BaseIO {
     private static final WrongFileIO wrongFileIO;
+    private static final int WRONG_COUNT_UPPER_BOUND = 10;
 
     private static String userId;
 
@@ -101,6 +102,9 @@ public class WrongFileIO extends BaseIO {
     @Override
     public void IncrementWrongCount(Word question, File file) {
         WrongWordRepository wwr = WrongWordRepository.getInstance();
+        if(wwr.getCount(question) >= WRONG_COUNT_UPPER_BOUND){
+            return;
+        }
         int changedCount = wwr.getCount(question) + 1;
         wwr.setCount(question, changedCount);
 

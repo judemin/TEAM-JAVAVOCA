@@ -186,8 +186,9 @@ public class QuizManager {
                     System.out.print("오답 데이터 파일에 추가합니다. ");
                 } else {
                     int currentCount = wrongWordRepository.getCount(question);
+                    int displayedCount = currentCount >= 10 ? currentCount : currentCount+1;
                     wrongFileIO.IncrementWrongCount(question, userWrongFile);
-                    System.out.print("현재 오답 수: " + (currentCount + 1) + ". ");
+                    System.out.print("현재 오답 수: " + displayedCount + ". ");
                 }
                 wrongCount++;
             }
