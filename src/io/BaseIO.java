@@ -35,14 +35,15 @@ public class BaseIO {
     public void editWrongWord(Word word){}
 
     public static void editWrongWordInFile(File file, Word word) {
-        ArrayList<String> filteredLines = new ArrayList<>();
+        ArrayList<String> irrelevantLines = new ArrayList<>();
+        ArrayList<String> editedLines = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
 
             while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
                 if(line.trim().isEmpty()){
-                    filteredLines.add(line);
+                    irrelevantLines.add(line);
                     continue;
                 }
 
@@ -53,12 +54,12 @@ public class BaseIO {
                 if (engWord.equalsIgnoreCase(word.getWord())) {
                     String[] temp = line.split(":");
                     if(temp.length >= 3){ // 오답파일일 경우
-                        filteredLines.add(temp[0] + ":" + word.getMeaning() + ":" + temp[2]);
+                        editedLines.add(temp[0] + ":" + word.getMeaning() + ":" + temp[2]);
                     } else { //단어파일일 경우
-                        filteredLines.add(temp[0] + ":" + word.getMeaning());
+                        editedLines.add(temp[0] + ":" + word.getMeaning());
                     }
                 } else {
-                    filteredLines.add(line);
+                    irrelevantLines.add(line);
                 }
             }
 
@@ -66,8 +67,11 @@ public class BaseIO {
             exitProgram();
         }
 
+        ArrayList<String> mergedLines = new ArrayList<>(irrelevantLines);
+        mergedLines.addAll(editedLines);
+
         try {
-            Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
+            Files.write(file.toPath(), mergedLines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             exitProgram();
         }
@@ -121,14 +125,15 @@ public class BaseIO {
      * @author 기찬, 승우
      */
     public void editWordInFile(File file, Word word) throws IOException{
-        ArrayList<String> filteredLines = new ArrayList<>();
+        ArrayList<String> irrelevantLines = new ArrayList<>();
+        ArrayList<String> editedLines = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
 
             while ((line = br.readLine()) != null) {  // 파일 끝(null)을 만날 때까지 읽기
                 if(line.trim().isEmpty()){
-                    filteredLines.add(line);
+                    irrelevantLines.add(line);
                     continue;
                 }
 
@@ -139,12 +144,12 @@ public class BaseIO {
                 if (engWord.equalsIgnoreCase(word.getWord())) {
                     String[] temp = line.split(":");
                     if(temp.length >= 3){ // 오답파일일 경우
-                        filteredLines.add(temp[0] + ":" + word.getMeaning() + ":" + temp[2]);
+                        editedLines.add(temp[0] + ":" + word.getMeaning() + ":" + temp[2]);
                     } else { //단어파일일 경우
-                        filteredLines.add(temp[0] + ":" + word.getMeaning());
+                        editedLines.add(temp[0] + ":" + word.getMeaning());
                     }
                 } else {
-                    filteredLines.add(line);
+                    irrelevantLines.add(line);
                 }
             }
 
@@ -152,8 +157,11 @@ public class BaseIO {
             exitProgram();
         }
 
+        ArrayList<String> mergedLines = new ArrayList<>(irrelevantLines);
+        mergedLines.addAll(editedLines);
+
         try {
-            Files.write(file.toPath(), filteredLines, StandardCharsets.UTF_8);
+            Files.write(file.toPath(), mergedLines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             exitProgram();
         }
