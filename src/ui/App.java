@@ -217,7 +217,7 @@ public class App {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 String[] tokens = line.split(":");
-                if (tokens.length == 2 && tokens[0].equals(userId) && tokens[1].equals(password)) {
+                if (tokens.length == 2 && tokens[0].trim().equals(userId) && tokens[1].trim().equals(password)) {
                     return true;
                 }
             }
