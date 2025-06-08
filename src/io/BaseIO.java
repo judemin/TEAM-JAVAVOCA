@@ -6,7 +6,9 @@ import enums.FilePath;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -235,4 +237,31 @@ public class BaseIO {
     }
 
     public void IncrementWrongCount(Word question, File file) {}
+
+    public void decrementWrongCount(Word word, File file) {
+        try {
+            List<String> lines = Files.readAllLines(file.toPath());
+            List<String> updatedLines = new ArrayList<>();
+
+            for (String line : lines) {
+                String[] parts = line.split(":");
+                if (parts.length < 3) continue;
+
+                String wordText = parts[0].trim();
+                String meaning = parts[1].trim();
+                int count = Integer.parseInt(parts[2].trim());
+
+                if (word.getWord().equalsIgnoreCase(wordText)) {
+                    count = Math.max(0, count - 1);
+                    if (count == 0) continue; // 제거
+                    System.out.println("현재 오답 수 :" + count);
+                }
+                updatedLines.add(wordText + ": " + meaning + ": " + count);
+            }
+
+            Files.write(file.toPath(), updatedLines, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

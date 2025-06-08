@@ -95,8 +95,6 @@ public class WordManager {
 
         System.out.print("정말 삭제하시겠습니까? (Y/그 외) > ");
         if (scanner.nextLine().equals("Y")) {
-            // test
-            System.out.println(WrongAnswerRateCalculator.getWrongRate(existingWord));
             if(WrongAnswerRateCalculator.getWrongRate(existingWord) > MINIMAL_DELETE_WRONGRATE){
                 System.out.println("해당 단어의 오답률이 " + MINIMAL_DELETE_WRONGRATE + " 초과이므로 삭제할 수 없습니다.");
             } else {
