@@ -5,6 +5,8 @@ import data.repository.BaseRepository;
 import io.BaseIO;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 /**
@@ -152,12 +154,18 @@ public class QuizManager {
                     isCorrect = true;
 
                     if (useWrongMode) {
-                        wrongFileIO.removeWord(userWrongFile, question);
-                        System.out.println("맞았습니다! 위 단어는 오답 데이터 파일에서 삭제됩니다.");
+
+                        int wrongCountOfWord = wrongWordRepository.getCount(question);
+                        if (wrongCountOfWord <= 1) {
+                            wrongFileIO.removeWord(userWrongFile, question);
+                            System.out.println("맞았습니다! 위 단어는 오답 데이터 파일에서 삭제됩니다.");
+                        } else {
+                            wrongFileIO.decrementWrongCount(question, userWrongFile);
+                            System.out.println("맞았습니다!");
+                        }
                     } else {
                         System.out.println("맞았습니다!");
                     }
-
                     break;
                 } else {
                     attempts++;
@@ -184,11 +192,14 @@ public class QuizManager {
                 wrongCount++;
             }
 
-            System.out.println("다음 문제로 넘어갑니다");
+            if (i < quizList.size() - 1) {
+                System.out.println("다음 문제로 넘어갑니다");
+            }
         }
-
+        System.out.println();
         System.out.println("맞은 개수: " + correctCount + "개");
         System.out.println("틀린 개수: " + wrongCount + "개");
         return true;
     }
+
 }
