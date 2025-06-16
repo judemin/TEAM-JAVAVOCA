@@ -84,6 +84,7 @@ public class App {
         File wrongFile = new File(getCurrentPath(),wrongFileName);
         if (!wrongFile.exists()) {
             wrongFile.createNewFile();
+            System.out.println("오답 데이터 파일을 생성했습니다.");
             return;
         }
 
